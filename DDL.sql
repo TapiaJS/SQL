@@ -1278,3 +1278,11 @@ ALTER TABLE PreescribirMedPreparado
 ALTER COLUMN DosisPrescrita SET NOT NULL,
 ALTER COLUMN Frecuencia SET NOT NULL,
 ALTER COLUMN Duracion SET NOT NULL;
+
+
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se renombran para mantener congruencia estricta con el Modelo Relacional
+ALTER TABLE PreescribirMedComercial RENAME TO PrescribirMedComercial;
+ALTER TABLE PreescribirMedPreparado RENAME TO PrescribirMedPreparado;

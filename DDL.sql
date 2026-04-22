@@ -56,6 +56,11 @@ ALTER COLUMN NumEmpleado SET NOT NULL,
 ALTER COLUMN IdSucursal SET NOT NULL,
 ADD CONSTRAINT Clinica_u1 UNIQUE (IdSucursal);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina porque el número de empleados se calcula con funciones de agregación (DQL)
+ALTER TABLE Clinica DROP COLUMN NumEmpleado;
 
 -- Tabla 3
 CREATE TABLE Medico (

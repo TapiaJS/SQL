@@ -1035,6 +1035,13 @@ ADD CONSTRAINT Ticket_d3 CHECK (PrecioNeto >= 0),
 ALTER COLUMN IdCliente SET NOT NULL,
 ALTER COLUMN IdSucursal SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se eliminan porque el precio bruto y el precio neto se deben calcular mediante consultas DQL
+ALTER TABLE Ticket 
+    DROP COLUMN PrecioBruto,
+    DROP COLUMN PrecioNeto;
 
 -- Tabla 4
 CREATE TABLE Telefonos_Cliente (

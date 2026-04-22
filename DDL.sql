@@ -29,6 +29,13 @@ ALTER COLUMN Colonia SET NOT NULL,
 ALTER COLUMN Estado SET NOT NULL,
 ALTER COLUMN Telefono SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Sucursal
+ADD CONSTRAINT Sucursal_d1 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+
 
 -- Tabla 2
 CREATE TABLE Clinica (
@@ -114,6 +121,12 @@ ALTER COLUMN VigenciaCertificacion SET NOT NULL,
 ALTER COLUMN CedulaProfesional SET NOT NULL,
 ADD CONSTRAINT Medico_u1 UNIQUE (CedulaProfesional);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Medico
+ADD CONSTRAINT Medico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 
 -- Tabla 4
@@ -168,6 +181,12 @@ ALTER COLUMN CertificacionReanimacion SET NOT NULL,
 ALTER COLUMN CedulaProfesional SET NOT NULL,
 ADD CONSTRAINT Enfermero_u1 UNIQUE (CedulaProfesional);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Enfermero
+ADD CONSTRAINT Enfermero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 -- Tabla 5
 CREATE TABLE Farmaceutico (
@@ -216,6 +235,13 @@ ALTER COLUMN IdSucursal SET NOT NULL,
 ALTER COLUMN CedulaProfesional SET NOT NULL,
 ADD CONSTRAINT Farmaceutico_u1 UNIQUE (CedulaProfesional);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Farmaceutico
+ADD CONSTRAINT Farmaceutico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+
 
 -- Tabla 6
 CREATE TABLE Cajero (
@@ -260,6 +286,12 @@ ALTER COLUMN Salario SET NOT NULL,
 ADD CONSTRAINT Cajero_d1 CHECK (Salario > 0),
 ALTER COLUMN IdSucursal SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Cajero
+ADD CONSTRAINT Cajero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 -- Tabla 7
 CREATE TABLE Aseador (
@@ -304,6 +336,12 @@ ALTER COLUMN Salario SET NOT NULL,
 ADD CONSTRAINT Aseador_d1 CHECK (Salario > 0),
 ALTER COLUMN IdSucursal SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Aseador
+ADD CONSTRAINT Aseador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 -- Tabla 8
 CREATE TABLE Cuidador (
@@ -348,6 +386,12 @@ ALTER COLUMN Salario SET NOT NULL,
 ADD CONSTRAINT Cuidador_d1 CHECK (Salario > 0),
 ALTER COLUMN IdSucursal SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Cuidador
+ADD CONSTRAINT Cuidador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 -- Tabla 9
 CREATE TABLE Telefonos_Medico (
@@ -837,6 +881,13 @@ ADD CONSTRAINT Proveedor_d1 CHECK (NumeroExterior > 0),
 ALTER COLUMN Colonia SET NOT NULL,
 ALTER COLUMN Estado SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Proveedor
+ADD CONSTRAINT Proveedor_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+
 
 -- Tabla 2
 CREATE TABLE Telefonos_Proveedor (
@@ -972,6 +1023,12 @@ ALTER COLUMN Estado SET NOT NULL,
 ALTER COLUMN MetodoPago SET NOT NULL,
 ADD CONSTRAINT Cliente_d3 CHECK (MetodoPago IN ('Tarjeta', 'Efectivo'));
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Cliente
+ADD CONSTRAINT Cliente_d4 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 -- Tabla 2
 CREATE TABLE ClienteOnline(

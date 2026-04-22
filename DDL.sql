@@ -1362,11 +1362,12 @@ ALTER COLUMN Duracion SET NOT NULL;
 --                      BLOQUE DE CORRECCIONES 
 -- =================================================================
 -- Se renombran para mantener congruencia estricta con el Modelo Relacional
-ALTER TABLE PreescribirMedComercial RENAME TO PrescribirMedComercial
--- Se agrega restricción NOT NULL para ViaAdministracionIndicada
-ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
+ALTER TABLE PreescribirMedComercial RENAME TO PrescribirMedComercial;
+ALTER TABLE PreescribirMedPreparado RENAME TO PrescribirMedPreparado;
 
-ALTER TABLE PreescribirMedPreparado RENAME TO PrescribirMedPreparado
 -- Se agrega restricción NOT NULL para ViaAdministracionIndicada
-ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;;
+ALTER TABLE PrescribirMedComercial
+ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
+ALTER TABLE PrescribirMedPreparado
+ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
 

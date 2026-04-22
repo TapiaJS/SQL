@@ -34,7 +34,9 @@ ALTER COLUMN Telefono SET NOT NULL;
 -- =================================================================
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Sucursal
-ADD CONSTRAINT Sucursal_d1 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+ADD CONSTRAINT Sucursal_d1 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Sucursal_d2 CHECK (NumeroExterior > 0);
 
 
 -- Tabla 2
@@ -126,7 +128,9 @@ ADD CONSTRAINT Medico_u1 UNIQUE (CedulaProfesional);
 -- =================================================================
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Medico
-ADD CONSTRAINT Medico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+ADD CONSTRAINT Medico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Medico_d3 CHECK (NumeroExterior > 0);
 
 
 -- Tabla 4
@@ -186,7 +190,9 @@ ADD CONSTRAINT Enfermero_u1 UNIQUE (CedulaProfesional);
 -- =================================================================
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Enfermero
-ADD CONSTRAINT Enfermero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+ADD CONSTRAINT Enfermero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Enfermero_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 5
 CREATE TABLE Farmaceutico (
@@ -240,7 +246,9 @@ ADD CONSTRAINT Farmaceutico_u1 UNIQUE (CedulaProfesional);
 -- =================================================================
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Farmaceutico
-ADD CONSTRAINT Farmaceutico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+ADD CONSTRAINT Farmaceutico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Farmaceutico_d3 CHECK (NumeroExterior > 0);
 
 
 -- Tabla 6
@@ -291,7 +299,9 @@ ALTER COLUMN IdSucursal SET NOT NULL;
 -- =================================================================
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Cajero
-ADD CONSTRAINT Cajero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+ADD CONSTRAINT Cajero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Cajero_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 7
 CREATE TABLE Aseador (
@@ -341,7 +351,9 @@ ALTER COLUMN IdSucursal SET NOT NULL;
 -- =================================================================
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Aseador
-ADD CONSTRAINT Aseador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+ADD CONSTRAINT Aseador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Aseador_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 8
 CREATE TABLE Cuidador (
@@ -391,7 +403,9 @@ ALTER COLUMN IdSucursal SET NOT NULL;
 -- =================================================================
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Cuidador
-ADD CONSTRAINT Cuidador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+ADD CONSTRAINT Cuidador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Cuidador_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 9
 CREATE TABLE Telefonos_Medico (

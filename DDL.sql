@@ -986,11 +986,28 @@ PRIMARY KEY (IdProveedor, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Proveedor ADD CONSTRAINT Telefonos_Proveedor_fk 
-FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Proveedor
 ADD CONSTRAINT Telefonos_Proveedor_v CHECK (Telefono ~ '^(\+[0-9]{1,3})?[0-9]{10}$');
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE Telefonos_Proveedor IS 'Tabla que almacena los números de teléfono de contacto de los proveedores.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN Telefonos_Proveedor.IdProveedor IS 'Identificador del proveedor dueño de este número de teléfono.';
+COMMENT ON COLUMN Telefonos_Proveedor.Telefono IS 'Número de teléfono de contacto del proveedor.';
+
+-- Comentarios para los constraints (restricciones, PK y FK)
+COMMENT ON CONSTRAINT Telefonos_Proveedor_pk ON Telefonos_Proveedor IS 'Llave primaria compuesta. Garantiza que un mismo proveedor no tenga el mismo número de teléfono registrado más de una vez.';
+COMMENT ON CONSTRAINT Telefonos_Proveedor_fk ON Telefonos_Proveedor IS 'Llave foránea hacia Proveedor. Si el proveedor se elimina, sus teléfonos se borran automáticamente en cascada.';
+COMMENT ON CONSTRAINT Telefonos_Proveedor_v ON Telefonos_Proveedor IS 'Valida que el número de teléfono tenga 10 dígitos numéricos exactos, permitiendo de forma opcional el código de país al inicio (ej. +52).';
 
 
 -- Tabla 3

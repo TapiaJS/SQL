@@ -844,6 +844,12 @@ ALTER COLUMN FechaElaboracion SET NOT NULL,
 ALTER COLUMN CantidadElaborada SET NOT NULL,
 ADD CONSTRAINT Elaborar_d1 CHECK (CantidadElaborada > 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK Elaborar_pk
+ALTER TABLE Elaborar 
+DROP CONSTRAINT Elaborar_pk;
 
 -- Tabla 5
 CREATE TABLE Contener (
@@ -868,6 +874,12 @@ ALTER TABLE Contener
 ALTER COLUMN CantidadRequerida SET NOT NULL,
 ADD CONSTRAINT Contener_d1 CHECK (CantidadRequerida > 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK Conetener_pk
+ALTER TABLE Contener 
+DROP CONSTRAINT Contener_pk;
 
 -- MÓDULO 3
 
@@ -961,6 +973,13 @@ ADD CONSTRAINT EntregarMedComercial_d2 CHECK (PrecioPublico >= 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT EntregarMedComercial_d3 CHECK (PrecioUnitario >= 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK EntregarMedComercial_pk
+ALTER TABLE EntregarMedComercial 
+DROP CONSTRAINT EntregarMedComercial_pk;
+
 
 -- Tabla 4
 CREATE TABLE EntregarInsumo (
@@ -1000,6 +1019,13 @@ ALTER COLUMN PrecioPublico SET NOT NULL,
 ADD CONSTRAINT EntregarInsumo_d2 CHECK (PrecioPublico >= 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT EntregarInsumo_d3 CHECK (PrecioUnitario >= 0);
+
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK EntregarInsumo_pk
+ALTER TABLE EntregarInsumo 
+DROP CONSTRAINT EntregarInsumo_pk;
 
 
 -- MÓDULO 5
@@ -1178,6 +1204,12 @@ ADD CONSTRAINT TenerMedComercial_d1 CHECK (CantidadComprada > 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT TenerMedComercial_d2 CHECK (PrecioUnitario >= 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK EntregarInsumo_pk
+ALTER TABLE TenerMedComercial
+DROP CONSTRAINT TenerMedComercial_pk;
 
 -- Tabla 7
 CREATE TABLE TenerMedPreparado(
@@ -1205,6 +1237,12 @@ ADD CONSTRAINT TenerMedPreparado_d1 CHECK (CantidadComprada > 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT TenerMedPreparado_d2 CHECK (PrecioUnitario >= 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK TenerMedPreparado_pk
+ALTER TABLE TenerMedPreparado 
+DROP CONSTRAINT TenerMedPreparado_pk;
 
 -- MÓDULO 4
 
@@ -1370,4 +1408,16 @@ ALTER TABLE PrescribirMedComercial
 ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
 ALTER TABLE PrescribirMedPreparado
 ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
+
+-- Se elimina la PK EntregarInsumo_pk
+ALTER TABLE PrescribirMedComercial 
+DROP CONSTRAINT PreescribirMedComercial_pk;
+ALTER TABLE PrescribirMedPreparado 
+DROP CONSTRAINT PreescribirMedPreparado_pk;
+
+ALTER TABLE PrescribirMedPreparado 
+-- Se elimina la FK PreescribirMedPreparado_fk2
+DROP CONSTRAINT PreescribirMedPreparado_fk2,
+-- Se añade la fk con la referencia corregida PreescribirMedPreparado_fk2
+ADD CONSTRAINT PreescribirMedPreparado_fk2 FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
 

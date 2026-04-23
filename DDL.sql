@@ -56,7 +56,8 @@ PRIMARY KEY (IdClinica);
 
 -- FK
 ALTER TABLE Clinica ADD CONSTRAINT Clinica_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Clinica
@@ -100,7 +101,8 @@ PRIMARY KEY (RFC);
 
 -- FK
 ALTER TABLE Medico ADD CONSTRAINT Medico_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Medico
@@ -160,7 +162,8 @@ PRIMARY KEY (RFC);
 
 -- FK
 ALTER TABLE Enfermero ADD CONSTRAINT Enfermero_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Enfermero
@@ -217,7 +220,8 @@ PRIMARY KEY (RFC);
 
 -- FK
 ALTER TABLE Farmaceutico ADD CONSTRAINT Farmaceutico_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Farmaceutico
@@ -272,7 +276,8 @@ PRIMARY KEY (RFC);
 
 -- FK
 ALTER TABLE Cajero ADD CONSTRAINT Cajero_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Cajero
@@ -324,7 +329,8 @@ PRIMARY KEY (RFC);
 
 -- FK
 ALTER TABLE Aseador ADD CONSTRAINT Aseador_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Aseador
@@ -376,7 +382,8 @@ PRIMARY KEY (RFC);
 
 -- FK
 ALTER TABLE Cuidador ADD CONSTRAINT Cuidador_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Cuidador
@@ -416,7 +423,8 @@ PRIMARY KEY (RFC, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Medico ADD CONSTRAINT Telefonos_Medico_fk
-FOREIGN KEY (RFC) REFERENCES Medico(RFC);
+FOREIGN KEY (RFC) REFERENCES Medico(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Medico
@@ -435,7 +443,8 @@ PRIMARY KEY (RFC, Correo);
 
 -- FK
 ALTER TABLE Correos_Medico ADD CONSTRAINT Correos_Medico_fk
-FOREIGN KEY (RFC) REFERENCES Medico(RFC);
+FOREIGN KEY (RFC) REFERENCES Medico(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Correos_Medico
@@ -454,7 +463,8 @@ PRIMARY KEY (RFC, Especialidad);
 
 -- FK
 ALTER TABLE Especialidades ADD CONSTRAINT Especialidades_fk
-FOREIGN KEY (RFC) REFERENCES Medico(RFC);
+FOREIGN KEY (RFC) REFERENCES Medico(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 -- Tabla 12
@@ -469,7 +479,8 @@ PRIMARY KEY (RFC, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Enfermero ADD CONSTRAINT Telefonos_Enfermero_fk
-FOREIGN KEY (RFC) REFERENCES Enfermero(RFC);
+FOREIGN KEY (RFC) REFERENCES Enfermero(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Enfermero
@@ -488,7 +499,8 @@ PRIMARY KEY (RFC, Correo);
 
 -- FK
 ALTER TABLE Correos_Enfermero ADD CONSTRAINT Correos_Enfermero_fk
-FOREIGN KEY (RFC) REFERENCES Enfermero(RFC);
+FOREIGN KEY (RFC) REFERENCES Enfermero(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Correos_Enfermero
@@ -507,7 +519,8 @@ PRIMARY KEY (RFC, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Farmaceutico ADD CONSTRAINT Telefonos_Farmaceutico_fk
-FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC);
+FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Farmaceutico
@@ -526,7 +539,8 @@ PRIMARY KEY (RFC, Correo);
 
 -- FK
 ALTER TABLE Correos_Farmaceutico ADD CONSTRAINT Correos_Farmaceutico_fk
-FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC);
+FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Correos_Farmaceutico
@@ -545,7 +559,8 @@ PRIMARY KEY (RFC, EspecialidadPreparacion);
 
 -- FK
 ALTER TABLE Especialidades_Preparacion ADD CONSTRAINT Especialidades_Preparacion_fk
-FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC);
+FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 -- Tabla 17
@@ -560,7 +575,8 @@ PRIMARY KEY (RFC, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Cajero ADD CONSTRAINT Telefonos_Cajero_fk
-FOREIGN KEY (RFC) REFERENCES Cajero(RFC);
+FOREIGN KEY (RFC) REFERENCES Cajero(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Cajero
@@ -579,7 +595,8 @@ PRIMARY KEY (RFC, Correo);
 
 -- FK
 ALTER TABLE Correos_Cajero ADD CONSTRAINT Correos_Cajero_fk
-FOREIGN KEY (RFC) REFERENCES Cajero(RFC);
+FOREIGN KEY (RFC) REFERENCES Cajero(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Correos_Cajero
@@ -598,7 +615,8 @@ PRIMARY KEY (RFC, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Aseador ADD CONSTRAINT Telefonos_Aseador_fk
-FOREIGN KEY (RFC) REFERENCES Aseador(RFC);
+FOREIGN KEY (RFC) REFERENCES Aseador(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Aseador
@@ -617,7 +635,8 @@ PRIMARY KEY (RFC, Correo);
 
 -- FK
 ALTER TABLE Correos_Aseador ADD CONSTRAINT Correos_Aseador_fk
-FOREIGN KEY (RFC) REFERENCES Aseador(RFC);
+FOREIGN KEY (RFC) REFERENCES Aseador(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Correos_Aseador
@@ -636,7 +655,8 @@ PRIMARY KEY (RFC, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Cuidador ADD CONSTRAINT Telefonos_Cuidador_fk
-FOREIGN KEY (RFC) REFERENCES Cuidador(RFC);
+FOREIGN KEY (RFC) REFERENCES Cuidador(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Cuidador
@@ -655,7 +675,8 @@ PRIMARY KEY (RFC, Correo);
 
 -- FK
 ALTER TABLE Correos_Cuidador ADD CONSTRAINT Correos_Cuidador_fk
-FOREIGN KEY (RFC) REFERENCES Cuidador(RFC);
+FOREIGN KEY (RFC) REFERENCES Cuidador(RFC)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Correos_Cuidador
@@ -676,7 +697,8 @@ PRIMARY KEY (IdSucursal, Dia);
 
 -- FK
 ALTER TABLE Horarios_Sucursal ADD CONSTRAINT Horarios_Sucursal_fk
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Horarios_Sucursal
@@ -698,7 +720,8 @@ PRIMARY KEY (IdClinica, Dia);
 
 -- FK
 ALTER TABLE Horarios_Clinica ADD CONSTRAINT Horarios_Clinica_fk
-FOREIGN KEY (IdClinica) REFERENCES Clinica(IdClinica);
+FOREIGN KEY (IdClinica) REFERENCES Clinica(IdClinica)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Horarios_Clinica
@@ -825,10 +848,12 @@ PRIMARY KEY (RFC, IdMedicamento);
 
 -- FK
 ALTER TABLE Elaborar ADD CONSTRAINT Elaborar_fk1
-FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC);
+FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Elaborar ADD CONSTRAINT Elaborar_fk2
-FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Elaborar
@@ -857,10 +882,12 @@ PRIMARY KEY (IdMedicamento, IdInsumo);
 
 -- FK
 ALTER TABLE Contener ADD CONSTRAINT Contener_fk1
-FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE Contener ADD CONSTRAINT Contener_fk2
-FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo);
+FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Contener
@@ -923,7 +950,8 @@ PRIMARY KEY (IdProveedor, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Proveedor ADD CONSTRAINT Telefonos_Proveedor_fk 
-FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Proveedor
@@ -949,13 +977,16 @@ PRIMARY KEY (IdProveedor, IdSucursal, IdMedicamento);
 
 -- FK
 ALTER TABLE EntregarMedComercial ADD CONSTRAINT EntregarMedComercial_fk1 
-FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE EntregarMedComercial ADD CONSTRAINT EntregarMedComercial_fk2 
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE EntregarMedComercial ADD CONSTRAINT EntregarMedComercial_fk3 
-FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE EntregarMedComercial
@@ -996,13 +1027,16 @@ PRIMARY KEY (IdProveedor, IdSucursal, IdInsumo);
 
 -- FK
 ALTER TABLE EntregarInsumo ADD CONSTRAINT EntregarInsumo_fk1 
-FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE EntregarInsumo ADD CONSTRAINT EntregarInsumo_fk2 
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE EntregarInsumo ADD CONSTRAINT EntregarInsumo_fk3 
-FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo);
+FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE EntregarInsumo
@@ -1086,7 +1120,8 @@ PRIMARY KEY (IdCliente);
 
 -- FK
 ALTER TABLE ClienteOnline ADD CONSTRAINT ClienteOnline_fk
-FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente);
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE ClienteOnline
@@ -1115,10 +1150,12 @@ PRIMARY KEY (FolioTicket);
 
 -- FK
 ALTER TABLE Ticket ADD CONSTRAINT Ticket_fk1
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Ticket ADD CONSTRAINT Ticket_fk2
-FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente);
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Ticket
@@ -1154,7 +1191,8 @@ PRIMARY KEY (IdCliente, Telefono);
 
 -- FK
 ALTER TABLE Telefonos_Cliente ADD CONSTRAINT Telefonos_Cliente_fk
-FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente);
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Cliente
@@ -1173,7 +1211,8 @@ PRIMARY KEY (IdCliente, Correo);
 
 -- FK
 ALTER TABLE Correos_Cliente ADD CONSTRAINT Correos_Cliente_fk
-FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente);
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Correos_Cliente
@@ -1194,10 +1233,12 @@ PRIMARY KEY (FolioTicket, IdMedicamento);
 
 -- FK
 ALTER TABLE TenerMedComercial ADD CONSTRAINT TenerMedComercial_fk1
-FOREIGN KEY (FolioTicket) REFERENCES Ticket(FolioTicket);
+FOREIGN KEY (FolioTicket) REFERENCES Ticket(FolioTicket)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE TenerMedComercial ADD CONSTRAINT TenerMedComercial_fk2
-FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE TenerMedComercial
@@ -1228,10 +1269,12 @@ PRIMARY KEY (FolioTicket, IdMedicamento);
 
 -- FK
 ALTER TABLE TenerMedPreparado ADD CONSTRAINT TenerMedPreparado_fk1
-FOREIGN KEY (FolioTicket) REFERENCES Ticket(FolioTicket);
+FOREIGN KEY (FolioTicket) REFERENCES Ticket(FolioTicket)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE TenerMedPreparado ADD CONSTRAINT TenerMedPreparado_fk2
-FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE TenerMedPreparado
@@ -1271,16 +1314,20 @@ PRIMARY KEY (IdConsulta);
 
 -- FK
 ALTER TABLE Consulta ADD CONSTRAINT Consulta_fk1
-FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente);
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Consulta ADD CONSTRAINT Consulta_fk2
-FOREIGN KEY (RFCMedico) REFERENCES Medico(RFC);
+FOREIGN KEY (RFCMedico) REFERENCES Medico(RFC)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Consulta ADD CONSTRAINT Consulta_fk3
-FOREIGN KEY (RFCEnfermero) REFERENCES Enfermero(RFC);
+FOREIGN KEY (RFCEnfermero) REFERENCES Enfermero(RFC)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 ALTER TABLE Consulta ADD CONSTRAINT Consulta_fk4
-FOREIGN KEY (FolioTicket) REFERENCES Ticket(FolioTicket);
+FOREIGN KEY (FolioTicket) REFERENCES Ticket(FolioTicket)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE Consulta
@@ -1310,7 +1357,8 @@ PRIMARY KEY (IdConsulta, NumeroReceta);
 
 -- FK
 ALTER TABLE Receta ADD CONSTRAINT Receta_fk
-FOREIGN KEY (IdConsulta) REFERENCES Consulta(IdConsulta);
+FOREIGN KEY (IdConsulta) REFERENCES Consulta(IdConsulta)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Receta
@@ -1337,7 +1385,8 @@ PRIMARY KEY (IdConsulta, NumeroReceta, AlergiasReportadas);
 
 -- FK
 ALTER TABLE Alergias_Reportadas ADD CONSTRAINT Alergias_Reportadas_fk
-FOREIGN KEY (IdConsulta, NumeroReceta) REFERENCES Receta(IdConsulta, NumeroReceta);
+FOREIGN KEY (IdConsulta, NumeroReceta) REFERENCES Receta(IdConsulta, NumeroReceta)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Alergias_Reportadas
@@ -1361,10 +1410,12 @@ PRIMARY KEY (IdConsulta, NumeroReceta, IdMedicamento);
 
 -- FK
 ALTER TABLE PreescribirMedComercial ADD CONSTRAINT PreescribirMedComercial_fk1
-FOREIGN KEY (IdConsulta, NumeroReceta) REFERENCES Receta(IdConsulta, NumeroReceta);
+FOREIGN KEY (IdConsulta, NumeroReceta) REFERENCES Receta(IdConsulta, NumeroReceta)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE PreescribirMedComercial ADD CONSTRAINT PreescribirMedComercial_fk2
-FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE PreescribirMedComercial
@@ -1390,7 +1441,8 @@ PRIMARY KEY (IdConsulta, NumeroReceta, IdMedicamento);
 
 -- FK
 ALTER TABLE PreescribirMedPreparado ADD CONSTRAINT PreescribirMedPreparado_fk1
-FOREIGN KEY (IdConsulta, NumeroReceta) REFERENCES Receta(IdConsulta, NumeroReceta);
+FOREIGN KEY (IdConsulta, NumeroReceta) REFERENCES Receta(IdConsulta, NumeroReceta)
+ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE PreescribirMedPreparado ADD CONSTRAINT PreescribirMedPreparado_fk2
 FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento);
@@ -1424,5 +1476,6 @@ ALTER TABLE PrescribirMedPreparado
 -- Se elimina la FK PreescribirMedPreparado_fk2
 DROP CONSTRAINT PreescribirMedPreparado_fk2,
 -- Se añade la fk con la referencia corregida PreescribirMedPreparado_fk2
-ADD CONSTRAINT PreescribirMedPreparado_fk2 FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
+ADD CONSTRAINT PreescribirMedPreparado_fk2 FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 

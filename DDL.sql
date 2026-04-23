@@ -1105,13 +1105,16 @@ PRIMARY KEY (IdProveedor, IdSucursal, IdInsumo);
 
 -- FK
 ALTER TABLE EntregarInsumo ADD CONSTRAINT EntregarInsumo_fk1 
-FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE EntregarInsumo ADD CONSTRAINT EntregarInsumo_fk2 
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE EntregarInsumo ADD CONSTRAINT EntregarInsumo_fk3 
-FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo);
+FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- Restricciones
 ALTER TABLE EntregarInsumo
@@ -1131,6 +1134,32 @@ ADD CONSTRAINT EntregarInsumo_d3 CHECK (PrecioUnitario >= 0);
 -- Se elimina la PK EntregarInsumo_pk
 ALTER TABLE EntregarInsumo 
 DROP CONSTRAINT EntregarInsumo_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE EntregarInsumo IS 'Tabla que registra el historial de recepciones de insumos entregadas por proveedores a las sucursales.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN EntregarInsumo.IdProveedor IS 'Identificador del proveedor que entrega el insumo.';
+COMMENT ON COLUMN EntregarInsumo.IdSucursal IS 'Identificador de la sucursal física que recibe el insumo.';
+COMMENT ON COLUMN EntregarInsumo.IdInsumo IS 'Identificador del insumo o materia prima ingresada.';
+COMMENT ON COLUMN EntregarInsumo.FechaRecepcion IS 'Fecha y hora exacta en la que se dio entrada al insumo en la sucursal.';
+COMMENT ON COLUMN EntregarInsumo.FechaCaducidad IS 'Fecha de caducidad del lote de insumo recibido.';
+COMMENT ON COLUMN EntregarInsumo.CondicionesAlmacenamiento IS 'Instrucciones específicas para el resguardo seguro del lote.';
+COMMENT ON COLUMN EntregarInsumo.CantidadRecibida IS 'Número de unidades físicas ingresadas al inventario en esta entrega.';
+COMMENT ON COLUMN EntregarInsumo.PrecioPublico IS 'Precio de venta al público fijado para el insumo (en caso de aplicar venta directa).';
+COMMENT ON COLUMN EntregarInsumo.PrecioUnitario IS 'Costo real al que se compró cada unidad del insumo al proveedor.';
+
+-- Comentarios para los constraints (restricciones y FKs)
+COMMENT ON CONSTRAINT EntregarInsumo_fk1 ON EntregarInsumo IS 'Llave foránea hacia Proveedor. Restringe borrado para mantener auditoría de compras y actualiza en cascada.';
+COMMENT ON CONSTRAINT EntregarInsumo_fk2 ON EntregarInsumo IS 'Llave foránea hacia Sucursal. Restringe borrado y actualiza en cascada.';
+COMMENT ON CONSTRAINT EntregarInsumo_fk3 ON EntregarInsumo IS 'Llave foránea hacia Insumo. Restringe borrado y actualiza en cascada.';
+COMMENT ON CONSTRAINT EntregarInsumo_d1 ON EntregarInsumo IS 'Valida que la cantidad de insumos recibida sea estrictamente mayor a cero.';
+COMMENT ON CONSTRAINT EntregarInsumo_d2 ON EntregarInsumo IS 'Valida que el precio al público no sea negativo.';
+COMMENT ON CONSTRAINT EntregarInsumo_d3 ON EntregarInsumo IS 'Valida que el precio unitario de compra no sea negativo.';
 
 
 -- MÓDULO 5

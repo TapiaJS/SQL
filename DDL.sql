@@ -29,6 +29,15 @@ ALTER COLUMN Colonia SET NOT NULL,
 ALTER COLUMN Estado SET NOT NULL,
 ALTER COLUMN Telefono SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Sucursal
+ADD CONSTRAINT Sucursal_d1 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Sucursal_d2 CHECK (NumeroExterior > 0);
+
 
 -- Tabla 2
 CREATE TABLE Clinica (
@@ -114,6 +123,14 @@ ALTER COLUMN VigenciaCertificacion SET NOT NULL,
 ALTER COLUMN CedulaProfesional SET NOT NULL,
 ADD CONSTRAINT Medico_u1 UNIQUE (CedulaProfesional);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Medico
+ADD CONSTRAINT Medico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Medico_d3 CHECK (NumeroExterior > 0);
 
 
 -- Tabla 4
@@ -168,6 +185,14 @@ ALTER COLUMN CertificacionReanimacion SET NOT NULL,
 ALTER COLUMN CedulaProfesional SET NOT NULL,
 ADD CONSTRAINT Enfermero_u1 UNIQUE (CedulaProfesional);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Enfermero
+ADD CONSTRAINT Enfermero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Enfermero_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 5
 CREATE TABLE Farmaceutico (
@@ -216,6 +241,15 @@ ALTER COLUMN IdSucursal SET NOT NULL,
 ALTER COLUMN CedulaProfesional SET NOT NULL,
 ADD CONSTRAINT Farmaceutico_u1 UNIQUE (CedulaProfesional);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Farmaceutico
+ADD CONSTRAINT Farmaceutico_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Farmaceutico_d3 CHECK (NumeroExterior > 0);
+
 
 -- Tabla 6
 CREATE TABLE Cajero (
@@ -260,6 +294,14 @@ ALTER COLUMN Salario SET NOT NULL,
 ADD CONSTRAINT Cajero_d1 CHECK (Salario > 0),
 ALTER COLUMN IdSucursal SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Cajero
+ADD CONSTRAINT Cajero_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Cajero_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 7
 CREATE TABLE Aseador (
@@ -304,6 +346,14 @@ ALTER COLUMN Salario SET NOT NULL,
 ADD CONSTRAINT Aseador_d1 CHECK (Salario > 0),
 ALTER COLUMN IdSucursal SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Aseador
+ADD CONSTRAINT Aseador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Aseador_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 8
 CREATE TABLE Cuidador (
@@ -348,6 +398,14 @@ ALTER COLUMN Salario SET NOT NULL,
 ADD CONSTRAINT Cuidador_d1 CHECK (Salario > 0),
 ALTER COLUMN IdSucursal SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Cuidador
+ADD CONSTRAINT Cuidador_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0),
+-- Se agrega restricción a NumeroExterior CHECK es mayor a cero
+ADD CONSTRAINT Cuidador_d3 CHECK (NumeroExterior > 0);
 
 -- Tabla 9
 CREATE TABLE Telefonos_Medico (
@@ -786,6 +844,12 @@ ALTER COLUMN FechaElaboracion SET NOT NULL,
 ALTER COLUMN CantidadElaborada SET NOT NULL,
 ADD CONSTRAINT Elaborar_d1 CHECK (CantidadElaborada > 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK Elaborar_pk
+ALTER TABLE Elaborar 
+DROP CONSTRAINT Elaborar_pk;
 
 -- Tabla 5
 CREATE TABLE Contener (
@@ -810,6 +874,12 @@ ALTER TABLE Contener
 ALTER COLUMN CantidadRequerida SET NOT NULL,
 ADD CONSTRAINT Contener_d1 CHECK (CantidadRequerida > 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK Conetener_pk
+ALTER TABLE Contener 
+DROP CONSTRAINT Contener_pk;
 
 -- MÓDULO 3
 
@@ -836,6 +906,13 @@ ALTER COLUMN NumeroExterior SET NOT NULL,
 ADD CONSTRAINT Proveedor_d1 CHECK (NumeroExterior > 0),
 ALTER COLUMN Colonia SET NOT NULL,
 ALTER COLUMN Estado SET NOT NULL;
+
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Proveedor
+ADD CONSTRAINT Proveedor_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 
 -- Tabla 2
@@ -896,6 +973,13 @@ ADD CONSTRAINT EntregarMedComercial_d2 CHECK (PrecioPublico >= 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT EntregarMedComercial_d3 CHECK (PrecioUnitario >= 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK EntregarMedComercial_pk
+ALTER TABLE EntregarMedComercial 
+DROP CONSTRAINT EntregarMedComercial_pk;
+
 
 -- Tabla 4
 CREATE TABLE EntregarInsumo (
@@ -936,6 +1020,13 @@ ADD CONSTRAINT EntregarInsumo_d2 CHECK (PrecioPublico >= 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT EntregarInsumo_d3 CHECK (PrecioUnitario >= 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK EntregarInsumo_pk
+ALTER TABLE EntregarInsumo 
+DROP CONSTRAINT EntregarInsumo_pk;
+
 
 -- MÓDULO 5
 
@@ -972,6 +1063,12 @@ ALTER COLUMN Estado SET NOT NULL,
 ALTER COLUMN MetodoPago SET NOT NULL,
 ADD CONSTRAINT Cliente_d3 CHECK (MetodoPago IN ('Tarjeta', 'Efectivo'));
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+ALTER TABLE Cliente
+ADD CONSTRAINT Cliente_d4 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
 -- Tabla 2
 CREATE TABLE ClienteOnline(
@@ -1107,6 +1204,12 @@ ADD CONSTRAINT TenerMedComercial_d1 CHECK (CantidadComprada > 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT TenerMedComercial_d2 CHECK (PrecioUnitario >= 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK EntregarInsumo_pk
+ALTER TABLE TenerMedComercial
+DROP CONSTRAINT TenerMedComercial_pk;
 
 -- Tabla 7
 CREATE TABLE TenerMedPreparado(
@@ -1134,6 +1237,12 @@ ADD CONSTRAINT TenerMedPreparado_d1 CHECK (CantidadComprada > 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
 ADD CONSTRAINT TenerMedPreparado_d2 CHECK (PrecioUnitario >= 0);
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se elimina la PK TenerMedPreparado_pk
+ALTER TABLE TenerMedPreparado 
+DROP CONSTRAINT TenerMedPreparado_pk;
 
 -- MÓDULO 4
 
@@ -1293,3 +1402,22 @@ ALTER COLUMN Duracion SET NOT NULL;
 -- Se renombran para mantener congruencia estricta con el Modelo Relacional
 ALTER TABLE PreescribirMedComercial RENAME TO PrescribirMedComercial;
 ALTER TABLE PreescribirMedPreparado RENAME TO PrescribirMedPreparado;
+
+-- Se agrega restricción NOT NULL para ViaAdministracionIndicada
+ALTER TABLE PrescribirMedComercial
+ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
+ALTER TABLE PrescribirMedPreparado
+ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
+
+-- Se elimina la PK EntregarInsumo_pk
+ALTER TABLE PrescribirMedComercial 
+DROP CONSTRAINT PreescribirMedComercial_pk;
+ALTER TABLE PrescribirMedPreparado 
+DROP CONSTRAINT PreescribirMedPreparado_pk;
+
+ALTER TABLE PrescribirMedPreparado 
+-- Se elimina la FK PreescribirMedPreparado_fk2
+DROP CONSTRAINT PreescribirMedPreparado_fk2,
+-- Se añade la fk con la referencia corregida PreescribirMedPreparado_fk2
+ADD CONSTRAINT PreescribirMedPreparado_fk2 FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
+

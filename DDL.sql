@@ -1029,13 +1029,16 @@ PRIMARY KEY (IdProveedor, IdSucursal, IdMedicamento);
 
 -- FK
 ALTER TABLE EntregarMedComercial ADD CONSTRAINT EntregarMedComercial_fk1 
-FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE EntregarMedComercial ADD CONSTRAINT EntregarMedComercial_fk2 
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE EntregarMedComercial ADD CONSTRAINT EntregarMedComercial_fk3 
-FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- Restricciones
 ALTER TABLE EntregarMedComercial
@@ -1055,6 +1058,32 @@ ADD CONSTRAINT EntregarMedComercial_d3 CHECK (PrecioUnitario >= 0);
 -- Se elimina la PK EntregarMedComercial_pk
 ALTER TABLE EntregarMedComercial 
 DROP CONSTRAINT EntregarMedComercial_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE EntregarMedComercial IS 'Tabla  que registra el historial de recepciones de medicamentos comerciales enviados por los proveedores a las sucursales.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN EntregarMedComercial.IdProveedor IS 'Identificador del proveedor que entrega la mercancía.';
+COMMENT ON COLUMN EntregarMedComercial.IdSucursal IS 'Identificador de la sucursal física que recibe el medicamento.';
+COMMENT ON COLUMN EntregarMedComercial.IdMedicamento IS 'Identificador del medicamento comercial ingresado.';
+COMMENT ON COLUMN EntregarMedComercial.FechaRecepcion IS 'Fecha y hora exacta en la que se dio entrada al medicamento en la sucursal.';
+COMMENT ON COLUMN EntregarMedComercial.FechaCaducidad IS 'Fecha de caducidad del lote de medicamento recibido.';
+COMMENT ON COLUMN EntregarMedComercial.CondicionesAlmacenamiento IS 'Instrucciones específicas para el resguardo de este lote.';
+COMMENT ON COLUMN EntregarMedComercial.CantidadRecibida IS 'Número de unidades físicas ingresadas al inventario en esta entrega.';
+COMMENT ON COLUMN EntregarMedComercial.PrecioPublico IS 'Precio de venta al público fijado para este lote.';
+COMMENT ON COLUMN EntregarMedComercial.PrecioUnitario IS 'Costo real al que se le compró cada unidad al proveedor.';
+
+-- Comentarios para los constraints (restricciones y FKs)
+COMMENT ON CONSTRAINT EntregarMedComercial_fk1 ON EntregarMedComercial IS 'Llave foránea hacia Proveedor. Restringe borrado para proteger historial de compras y actualiza en cascada.';
+COMMENT ON CONSTRAINT EntregarMedComercial_fk2 ON EntregarMedComercial IS 'Llave foránea hacia Sucursal. Restringe borrado para proteger historial y actualiza en cascada.';
+COMMENT ON CONSTRAINT EntregarMedComercial_fk3 ON EntregarMedComercial IS 'Llave foránea hacia MedComercial. Restringe borrado para proteger historial y actualiza en cascada.';
+COMMENT ON CONSTRAINT EntregarMedComercial_d1 ON EntregarMedComercial IS 'Valida que la cantidad recibida al inventario sea estrictamente mayor a cero.';
+COMMENT ON CONSTRAINT EntregarMedComercial_d2 ON EntregarMedComercial IS 'Valida que el precio al público no sea un valor negativo.';
+COMMENT ON CONSTRAINT EntregarMedComercial_d3 ON EntregarMedComercial IS 'Valida que el precio unitario de compra no sea un valor negativo.';
 
 
 -- Tabla 4

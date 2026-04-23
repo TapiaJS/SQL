@@ -1249,7 +1249,8 @@ PRIMARY KEY (IdCliente);
 
 -- FK
 ALTER TABLE ClienteOnline ADD CONSTRAINT ClienteOnline_fk
-FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente);
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente)
+ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Restricciones
 ALTER TABLE ClienteOnline
@@ -1258,6 +1259,25 @@ ADD CONSTRAINT Clienteonline_u1 UNIQUE (NombreUsuario),
 ALTER COLUMN Contraseña SET NOT NULL,
 ALTER COLUMN NumeroTarjeta SET NOT NULL,
 ALTER COLUMN FechaVencimiento SET NOT NULL;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE ClienteOnline IS 'Tabla que almacena las credenciales de acceso y datos de pago específicos para los clientes que utilizan la plataforma en línea.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN ClienteOnline.IdCliente IS 'Identificador del cliente. Funciona como llave primaria y a la vez como llave foránea hacia la tabla Cliente.';
+COMMENT ON COLUMN ClienteOnline.NombreUsuario IS 'Nombre de usuario único para el inicio de sesión en la plataforma.';
+COMMENT ON COLUMN ClienteOnline.Contraseña IS 'Contraseña cifrada (hash) del usuario para el acceso al sistema.';
+COMMENT ON COLUMN ClienteOnline.NumeroTarjeta IS 'Número de la tarjeta bancaria a 16 dígitos para realizar compras en línea.';
+COMMENT ON COLUMN ClienteOnline.FechaVencimiento IS 'Fecha de vencimiento de la tarjeta en formato MM/AA.';
+
+-- Comentarios para los constraints (restricciones, PK y FK)
+COMMENT ON CONSTRAINT ClienteOnline_pk ON ClienteOnline IS 'Llave primaria que identifica al cliente en línea (heredada de Cliente).';
+COMMENT ON CONSTRAINT ClienteOnline_fk ON ClienteOnline IS 'Llave foránea hacia Cliente. Borra y actualiza en cascada el perfil en línea si el cliente base es modificado o eliminado.';
+COMMENT ON CONSTRAINT Clienteonline_u1 ON ClienteOnline IS 'Garantiza que no existan dos clientes en línea compartiendo el mismo nombre de usuario.';
 
 
 -- Tabla 3

@@ -953,6 +953,26 @@ ALTER COLUMN Estado SET NOT NULL;
 ALTER TABLE Proveedor
 ADD CONSTRAINT Proveedor_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
 
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE Proveedor IS 'Tabla que almacena la información de los proveedores.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN Proveedor.IdProveedor IS 'Identificador único y autoincrementable del proveedor.';
+COMMENT ON COLUMN Proveedor.RazonSocial IS 'Nombre legal o razón social de la empresa proveedora.';
+COMMENT ON COLUMN Proveedor.Calle IS 'Calle del domicilio del proveedor.';
+COMMENT ON COLUMN Proveedor.NumeroExterior IS 'Número exterior del domicilio del proveedor.';
+COMMENT ON COLUMN Proveedor.NumeroInterior IS 'Número interior del domicilio del proveedor (es opcional).';
+COMMENT ON COLUMN Proveedor.Colonia IS 'Colonia del domicilio del proveedor.';
+COMMENT ON COLUMN Proveedor.Estado IS 'Estado donde reside el proveedor.';
+
+-- Comentarios para los constraints (restricciones y PK)
+COMMENT ON CONSTRAINT Proveedor_pk ON Proveedor IS 'Llave primaria que identifica de forma única a cada proveedor.';
+COMMENT ON CONSTRAINT Proveedor_d1 ON Proveedor IS 'Valida que el número exterior sea estrictamente mayor a cero.';
+COMMENT ON CONSTRAINT Proveedor_d2 ON Proveedor IS 'Valida que el número interior, en caso de existir (no ser nulo), sea mayor a cero.';
 
 -- Tabla 2
 CREATE TABLE Telefonos_Proveedor (

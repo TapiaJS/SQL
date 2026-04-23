@@ -883,10 +883,12 @@ PRIMARY KEY (IdMedicamento, IdInsumo);
 
 -- FK
 ALTER TABLE Contener ADD CONSTRAINT Contener_fk1
-FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
+ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE Contener ADD CONSTRAINT Contener_fk2
-FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo);
+FOREIGN KEY (IdInsumo) REFERENCES Insumo(IdInsumo)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- Restricciones
 ALTER TABLE Contener
@@ -899,6 +901,24 @@ ADD CONSTRAINT Contener_d1 CHECK (CantidadRequerida > 0);
 -- Se elimina la PK Conetener_pk
 ALTER TABLE Contener 
 DROP CONSTRAINT Contener_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE Contener IS 'Tabla que detalla los insumos que debe contener un medicamento preparado.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN Contener.IdMedicamento IS 'Identificador del medicamento preparado.';
+COMMENT ON COLUMN Contener.IdInsumo IS 'Identificador del insumo.';
+COMMENT ON COLUMN Contener.CantidadRequerida IS 'Cantidad exacta del insumo que debe contener el medicamento.';
+
+-- Comentarios para los constraints (restricciones)
+COMMENT ON CONSTRAINT Contener_fk1 ON Contener IS 'Llave foránea hacia MedPreparado. Borra y actualiza en cascada.';
+COMMENT ON CONSTRAINT Contener_fk2 ON Contener IS 'Llave foránea hacia Insumo. Restringe borrado si el insumo es contenido de algún medicamento y actualiza en cascada.';
+COMMENT ON CONSTRAINT Contener_d1 ON Contener IS 'Valida que la cantidad requerida del insumo sea estrictamente mayor a cero.';
+
 
 -- MÓDULO 3
 

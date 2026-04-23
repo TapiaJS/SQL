@@ -833,10 +833,12 @@ PRIMARY KEY (RFC, IdMedicamento);
 
 -- FK
 ALTER TABLE Elaborar ADD CONSTRAINT Elaborar_fk1
-FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC);
+FOREIGN KEY (RFC) REFERENCES Farmaceutico(RFC)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE Elaborar ADD CONSTRAINT Elaborar_fk2
-FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
+ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Restricciones
 ALTER TABLE Elaborar
@@ -850,6 +852,23 @@ ADD CONSTRAINT Elaborar_d1 CHECK (CantidadElaborada > 0);
 -- Se elimina la PK Elaborar_pk
 ALTER TABLE Elaborar 
 DROP CONSTRAINT Elaborar_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+-- Comentario para la tabla
+COMMENT ON TABLE Elaborar IS 'Tabla que registra los medicamentos preparados que son elaborados por los farmacéuticos.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN Elaborar.RFC IS 'Identificador del farmacéutico que elaboró el medicamento.';
+COMMENT ON COLUMN Elaborar.IdMedicamento IS 'Identificador del medicamento preparado.';
+COMMENT ON COLUMN Elaborar.FechaElaboracion IS 'Fecha y hora en la que se elaboró el lote de medicamento.';
+COMMENT ON COLUMN Elaborar.CantidadElaborada IS 'Cantidad de unidades creadas en esta elaboración.';
+
+-- Comentarios para los constraints (restricciones)
+COMMENT ON CONSTRAINT Elaborar_fk1 ON Elaborar IS 'Llave foránea hacia Farmaceutico. Restringe borrado y actualiza en cascada.';
+COMMENT ON CONSTRAINT Elaborar_fk2 ON Elaborar IS 'Llave foránea hacia MedPreparado. Borra y actualiza en cascada.';
+COMMENT ON CONSTRAINT Elaborar_d1 ON Elaborar IS 'Valida que la cantidad elaborada sea siempre un número positivo mayor a cero.';
 
 -- Tabla 5
 CREATE TABLE Contener (

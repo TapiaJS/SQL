@@ -1298,10 +1298,12 @@ PRIMARY KEY (FolioTicket);
 
 -- FK
 ALTER TABLE Ticket ADD CONSTRAINT Ticket_fk1
-FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal);
+FOREIGN KEY (IdSucursal) REFERENCES Sucursal(IdSucursal)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE Ticket ADD CONSTRAINT Ticket_fk2
-FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente);
+FOREIGN KEY (IdCliente) REFERENCES Cliente(IdCliente)
+ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- Restricciones
 ALTER TABLE Ticket
@@ -1323,6 +1325,27 @@ ALTER COLUMN IdSucursal SET NOT NULL;
 ALTER TABLE Ticket 
     DROP COLUMN PrecioBruto,
     DROP COLUMN PrecioNeto;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE Ticket IS 'Tabla que registra los comprobantes de las ventas realizadas a los clientes.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN Ticket.FolioTicket IS 'Identificador único y autoincrementable del ticket de venta.';
+COMMENT ON COLUMN Ticket.FechaPago IS 'Fecha en la que se concretó la venta.';
+COMMENT ON COLUMN Ticket.HoraPago IS 'Hora exacta en la que se registró y procesó el pago.';
+COMMENT ON COLUMN Ticket.TipoVenta IS 'Canal a través del cual se realizó la venta (Presencial o Web).';
+COMMENT ON COLUMN Ticket.IdSucursal IS 'Identificador de la sucursal que procesó o a la que se le atribuye la venta.';
+COMMENT ON COLUMN Ticket.IdCliente IS 'Identificador del cliente que realizó la compra.';
+
+-- Comentarios para los constraints (restricciones, PK y FK)
+COMMENT ON CONSTRAINT Ticket_pk ON Ticket IS 'Llave primaria que identifica de forma única a cada ticket.';
+COMMENT ON CONSTRAINT Ticket_fk1 ON Ticket IS 'Llave foránea hacia Sucursal. Restringe borrado para proteger historial financiero y actualiza en cascada.';
+COMMENT ON CONSTRAINT Ticket_fk2 ON Ticket IS 'Llave foránea hacia Cliente. Restringe borrado para mantener auditoría de ventas y actualiza en cascada.';
+COMMENT ON CONSTRAINT Ticket_d1 ON Ticket IS 'Valida que el tipo de venta sea exclusivamente Presencial o Web.';
 
 -- Tabla 4
 CREATE TABLE Telefonos_Cliente (

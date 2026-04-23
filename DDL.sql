@@ -1200,9 +1200,39 @@ ADD CONSTRAINT Cliente_d3 CHECK (MetodoPago IN ('Tarjeta', 'Efectivo'));
 -- =================================================================
 --                      BLOQUE DE CORRECCIONES 
 -- =================================================================
--- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
+-- Se agrega restricción a Materno NOT NULL
 ALTER TABLE Cliente
+ALTER COLUMN Materno SET NOT NULL,
+-- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ADD CONSTRAINT Cliente_d4 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+
+-- Comentario para la tabla
+COMMENT ON TABLE Cliente IS 'Tabla que almacena la información personal, dirección y preferencias de pago de los clientes.';
+
+-- Comentarios para las columnas
+COMMENT ON COLUMN Cliente.IdCliente IS 'Identificador único y autoincrementable del cliente.';
+COMMENT ON COLUMN Cliente.Nombre IS 'Nombre(s) del cliente.';
+COMMENT ON COLUMN Cliente.Paterno IS 'Apellido paterno del cliente.';
+COMMENT ON COLUMN Cliente.Materno IS 'Apellido materno del cliente.';
+COMMENT ON COLUMN Cliente.FechaNacimiento IS 'Fecha de nacimiento del cliente para cálculo de edad.';
+COMMENT ON COLUMN Cliente.Calle IS 'Calle del domicilio del cliente.';
+COMMENT ON COLUMN Cliente.NumeroExterior IS 'Número exterior del domicilio del cliente.';
+COMMENT ON COLUMN Cliente.NumeroInterior IS 'Número interior del domicilio del cliente (es opcional).';
+COMMENT ON COLUMN Cliente.Colonia IS 'Colonia del domicilio del cliente.';
+COMMENT ON COLUMN Cliente.Estado IS 'Estado donde reside el cliente.';
+COMMENT ON COLUMN Cliente.MetodoPago IS 'Método de pago preferido o registrado del cliente (Efectivo o Tarjeta).';
+
+-- Comentarios para los constraints (restricciones y PK)
+COMMENT ON CONSTRAINT Cliente_pk ON Cliente IS 'Llave primaria que identifica de forma única a cada cliente.';
+COMMENT ON CONSTRAINT Cliente_d1 ON Cliente IS 'Valida que la fecha de nacimiento no sea una fecha en el futuro.';
+COMMENT ON CONSTRAINT Cliente_d2 ON Cliente IS 'Valida que el número exterior sea estrictamente mayor a cero.';
+COMMENT ON CONSTRAINT Cliente_d3 ON Cliente IS 'Valida que el método de pago sea exclusivamente Tarjeta o Efectivo.';
+COMMENT ON CONSTRAINT Cliente_d4 ON Cliente IS 'Valida que el número interior, si se proporciona (no es nulo), sea mayor a cero.';
+
 
 -- Tabla 2
 CREATE TABLE ClienteOnline(

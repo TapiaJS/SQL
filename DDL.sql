@@ -1156,6 +1156,7 @@ ALTER TABLE Proveedor
 ALTER COLUMN RazonSocial SET NOT NULL,
 ALTER COLUMN Calle SET NOT NULL,
 ALTER COLUMN NumeroExterior SET NOT NULL,
+
 ADD CONSTRAINT Proveedor_d1 CHECK (NumeroExterior > 0),
 ALTER COLUMN Colonia SET NOT NULL,
 ALTER COLUMN Estado SET NOT NULL;
@@ -1166,6 +1167,14 @@ ALTER COLUMN Estado SET NOT NULL;
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ALTER TABLE Proveedor
 ADD CONSTRAINT Proveedor_d2 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Proveedor IS 'Catálogo de proveedores de medicamentos (comerciales) e insumos.';
+COMMENT ON CONSTRAINT Proveedor_pk ON Proveedor IS 'Llave primaria: Identificador único del proveedor.';
+COMMENT ON CONSTRAINT Proveedor_d1 ON Proveedor IS 'Validación: El número exterior debe ser positivo.';
+COMMENT ON CONSTRAINT Proveedor_d2 ON Proveedor IS 'Validación: El número interior debe ser positivo si existe.';
 
 
 -- Tabla 2
@@ -1186,6 +1195,14 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 -- Restricciones
 ALTER TABLE Telefonos_Proveedor
 ADD CONSTRAINT Telefonos_Proveedor_v CHECK (Telefono ~ '^(\+[0-9]{1,3})?[0-9]{10}$');
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Telefonos_Proveedor IS 'Atributo multivaluado que almacena los teléfonos de los proveedores.';
+COMMENT ON CONSTRAINT Telefonos_Proveedor_pk ON Telefonos_Proveedor IS 'Llave primaria compuesta (IdProveedor y teléfono).';
+COMMENT ON CONSTRAINT Telefonos_Proveedor_fk ON Telefonos_Proveedor IS 'Llave foránea: Relación con la tabla Proveedor.';
+COMMENT ON CONSTRAINT Telefonos_Proveedor_v ON Telefonos_Proveedor IS 'Validación: Formato de número telefónico (10 dígitos, opcionalmente con código de país).';
 
 
 -- Tabla 3
@@ -1224,10 +1241,13 @@ ALTER COLUMN FechaRecepcion SET NOT NULL,
 ALTER COLUMN FechaCaducidad SET NOT NULL,
 ALTER COLUMN CondicionesAlmacenamiento SET NOT NULL,
 ALTER COLUMN CantidadRecibida SET NOT NULL,
+
 ADD CONSTRAINT EntregarMedComercial_d1 CHECK (CantidadRecibida > 0),
 ALTER COLUMN PrecioPublico SET NOT NULL,
+
 ADD CONSTRAINT EntregarMedComercial_d2 CHECK (PrecioPublico >= 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
+
 ADD CONSTRAINT EntregarMedComercial_d3 CHECK (PrecioUnitario >= 0);
 
 -- =================================================================
@@ -1237,6 +1257,16 @@ ADD CONSTRAINT EntregarMedComercial_d3 CHECK (PrecioUnitario >= 0);
 ALTER TABLE EntregarMedComercial 
 DROP CONSTRAINT EntregarMedComercial_pk;
 
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE EntregarMedComercial IS 'Relación transaccional que registra la recepción de medicamentos comerciales.';
+COMMENT ON CONSTRAINT EntregarMedComercial_fk1 ON EntregarMedComercial IS 'Llave foránea: Proveedor que realiza la entrega.';
+COMMENT ON CONSTRAINT EntregarMedComercial_fk2 ON EntregarMedComercial IS 'Llave foránea: Sucursal que recibe el medicamento.';
+COMMENT ON CONSTRAINT EntregarMedComercial_fk3 ON EntregarMedComercial IS 'Llave foránea: Medicamento comercial recibido.';
+COMMENT ON CONSTRAINT EntregarMedComercial_d1 ON EntregarMedComercial IS 'Validación: La cantidad recibida debe ser mayor a cero.';
+COMMENT ON CONSTRAINT EntregarMedComercial_d2 ON EntregarMedComercial IS 'Validación: El precio público debe ser igual o mayor a cero.';
+COMMENT ON CONSTRAINT EntregarMedComercial_d3 ON EntregarMedComercial IS 'Validación: El precio unitario debe ser igual o mayor a cero.';
 
 -- Tabla 4
 CREATE TABLE EntregarInsumo (
@@ -1286,6 +1316,17 @@ ADD CONSTRAINT EntregarInsumo_d3 CHECK (PrecioUnitario >= 0);
 -- Se elimina la PK EntregarInsumo_pk
 ALTER TABLE EntregarInsumo 
 DROP CONSTRAINT EntregarInsumo_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE EntregarInsumo IS 'Relación transaccional que registra la recepción de insumos o materias primas.';
+COMMENT ON CONSTRAINT EntregarInsumo_fk1 ON EntregarInsumo IS 'Llave foránea: Proveedor que suministra el insumo.';
+COMMENT ON CONSTRAINT EntregarInsumo_fk2 ON EntregarInsumo IS 'Llave foránea: Sucursal receptora.';
+COMMENT ON CONSTRAINT EntregarInsumo_fk3 ON EntregarInsumo IS 'Llave foránea: Insumo o materia prima recibida.';
+COMMENT ON CONSTRAINT EntregarInsumo_d1 ON EntregarInsumo IS 'Validación: La cantidad de insumo recibida debe ser positiva.';
+COMMENT ON CONSTRAINT EntregarInsumo_d2 ON EntregarInsumo IS 'Validación: El precio público debe ser igual o mayor a cero.';
+COMMENT ON CONSTRAINT EntregarInsumo_d3 ON EntregarInsumo IS 'Validación: El precio unitario debe ser igual o mayor a cero.';
 
 
 -- =================================================================

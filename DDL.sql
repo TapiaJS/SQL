@@ -1579,7 +1579,7 @@ ADD CONSTRAINT TenerMedComercial_d2 CHECK (PrecioUnitario >= 0);
 -- =================================================================
 --                      BLOQUE DE CORRECCIONES 
 -- =================================================================
--- Se elimina la PK EntregarInsumo_pk
+-- Se elimina la PK TenerMedComercial_pk
 ALTER TABLE TenerMedComercial
 DROP CONSTRAINT TenerMedComercial_pk;
 
@@ -1689,6 +1689,18 @@ ADD CONSTRAINT Consulta_d1 CHECK (Precio >= 0),
 ALTER COLUMN FolioTicket SET NOT NULL,
 ADD CONSTRAINT Consulta_u2 UNIQUE (FolioTicket);
 
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Consulta IS 'Registro de consultas médicas realizadas en las clínicas.';
+COMMENT ON CONSTRAINT Consulta_pk ON Consulta IS 'Llave primaria: Identificador único de la consulta.';
+COMMENT ON CONSTRAINT Consulta_fk1 ON Consulta IS 'Llave foránea: Cliente que recibe la consulta.';
+COMMENT ON CONSTRAINT Consulta_fk2 ON Consulta IS 'Llave foránea: Médico que atiende la consulta.';
+COMMENT ON CONSTRAINT Consulta_fk3 ON Consulta IS 'Llave foránea: Enfermero de apoyo en la consulta.';
+COMMENT ON CONSTRAINT Consulta_fk4 ON Consulta IS 'Llave foránea: Ticket de pago vinculado a la consulta.';
+COMMENT ON CONSTRAINT Consulta_d1 ON Consulta IS 'Validación: El precio de la consulta no puede ser negativo.';
+COMMENT ON CONSTRAINT Consulta_u2 ON Consulta IS 'Restricción: Unicidad del ticket por consulta (1:1).';
+
 
 -- Tabla 2
 CREATE TABLE Receta(
@@ -1712,13 +1724,28 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 -- Restricciones
 ALTER TABLE Receta
 ALTER COLUMN PesoPaciente SET NOT NULL,
+
 ADD CONSTRAINT Receta_d1 CHECK (PesoPaciente > 0),
 ALTER COLUMN TallaPaciente SET NOT NULL,
+
 ADD CONSTRAINT Receta_d2 CHECK (TallaPaciente > 0),
 ALTER COLUMN Consultorio SET NOT NULL,
+
 ADD CONSTRAINT Receta_d3 CHECK (Consultorio > 0),
 ALTER COLUMN Turno SET NOT NULL,
+
 ADD CONSTRAINT Receta_d4 CHECK (Turno IN ('Matutino', 'Vespertino'));
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Receta IS 'Documento médico generado en una consulta con indicaciones de tratamiento.';
+COMMENT ON CONSTRAINT Receta_pk ON Receta IS 'Llave primaria compuesta (IdConsulta y NumeroReceta).';
+COMMENT ON CONSTRAINT Receta_fk ON Receta IS 'Llave foránea: Consulta médica que originó la receta.';
+COMMENT ON CONSTRAINT Receta_d1 ON Receta IS 'Validación: El peso del paciente debe ser positivo.';
+COMMENT ON CONSTRAINT Receta_d2 ON Receta IS 'Validación: La talla del paciente debe ser positiva.';
+COMMENT ON CONSTRAINT Receta_d3 ON Receta IS 'Validación: El número de consultorio debe ser positivo.';
+COMMENT ON CONSTRAINT Receta_d4 ON Receta IS 'Validación: Restringe el turno a Matutino o Vespertino.';
 
 
 -- Tabla 3
@@ -1740,6 +1767,13 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 -- Restricciones
 ALTER TABLE Alergias_Reportadas
 ALTER COLUMN AlergiasReportadas SET DEFAULT 'Ninguna conocida';
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Alergias_Reportadas IS 'Atributo multivaluado que registra las alergias del paciente en una receta.';
+COMMENT ON CONSTRAINT Alergias_Reportadas_pk ON Alergias_Reportadas IS 'Llave primaria compuesta (IdConsulta, NumeroReceta y AlergiasReportadas).';
+COMMENT ON CONSTRAINT Alergias_Reportadas_fk ON Alergias_Reportadas IS 'Llave foránea (compuesta): Receta a la que pertenece el reporte de alergias.';
 
 
 -- Tabla 4
@@ -1772,6 +1806,31 @@ ALTER COLUMN DosisPrescrita SET NOT NULL,
 ALTER COLUMN Frecuencia SET NOT NULL,
 ALTER COLUMN Duracion SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE CORRECCIONES 
+-- =================================================================
+-- Se renombra la tabla para mantener congruencia estricta con el Modelo Relacional
+ALTER TABLE PreescribirMedComercial RENAME TO PrescribirMedComercial;
+
+-- Se renombran las Llaves Foráneas para corregir el error ortográfico
+ALTER TABLE PrescribirMedComercial RENAME CONSTRAINT PreescribirMedComercial_fk1 TO PrescribirMedComercial_fk1;
+ALTER TABLE PrescribirMedComercial RENAME CONSTRAINT PreescribirMedComercial_fk2 TO PrescribirMedComercial_fk2;
+
+-- Se agrega restricción NOT NULL para ViaAdministracionIndicada
+ALTER TABLE PrescribirMedComercial
+ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
+
+-- Se elimina la PK PreescribirMedComercial_pk
+ALTER TABLE PrescribirMedComercial 
+DROP CONSTRAINT PreescribirMedComercial_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE PrescribirMedComercial IS 'Detalle de medicamentos comerciales recetados.';
+COMMENT ON CONSTRAINT PrescribirMedComercial_fk1 ON PrescribirMedComercial IS 'Llave foránea (compuesta): Receta que incluye la prescripción.';
+COMMENT ON CONSTRAINT PrescribirMedComercial_fk2 ON PrescribirMedComercial IS 'Llave foránea: Medicamento comercial recetado.';
+
 
 --Tabla 5
 CREATE TABLE PreescribirMedPreparado(
@@ -1794,7 +1853,8 @@ FOREIGN KEY (IdConsulta, NumeroReceta) REFERENCES Receta(IdConsulta, NumeroRecet
 ON UPDATE CASCADE ON DELETE CASCADE;
 
 ALTER TABLE PreescribirMedPreparado ADD CONSTRAINT PreescribirMedPreparado_fk2
-FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento);
+FOREIGN KEY (IdMedicamento) REFERENCES MedComercial(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;
 
 -- Restricciones
 ALTER TABLE PreescribirMedPreparado
@@ -1805,26 +1865,25 @@ ALTER COLUMN Duracion SET NOT NULL;
 -- =================================================================
 --                      BLOQUE DE CORRECCIONES 
 -- =================================================================
--- Se renombran para mantener congruencia estricta con el Modelo Relacional
-ALTER TABLE PreescribirMedComercial RENAME TO PrescribirMedComercial;
+-- Se renombra la tabla para mantener congruencia estricta con el Modelo Relacional
 ALTER TABLE PreescribirMedPreparado RENAME TO PrescribirMedPreparado;
 
+-- Se renombran las Llaves Foráneas para corregir el error ortográfico
+ALTER TABLE PrescribirMedPreparado RENAME CONSTRAINT PreescribirMedPreparado_fk1 TO PrescribirMedPreparado_fk1;
+ALTER TABLE PrescribirMedPreparado RENAME CONSTRAINT PreescribirMedPreparado_fk2 TO PrescribirMedPreparado_fk2;
+
 -- Se agrega restricción NOT NULL para ViaAdministracionIndicada
-ALTER TABLE PrescribirMedComercial
-ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
 ALTER TABLE PrescribirMedPreparado
 ALTER COLUMN ViaAdministracionIndicada SET NOT NULL;
 
--- Se elimina la PK EntregarInsumo_pk
-ALTER TABLE PrescribirMedComercial 
-DROP CONSTRAINT PreescribirMedComercial_pk;
+-- Se elimina la PK PreescribirMedPreparado_pk
 ALTER TABLE PrescribirMedPreparado 
 DROP CONSTRAINT PreescribirMedPreparado_pk;
 
-ALTER TABLE PrescribirMedPreparado 
--- Se elimina la FK PreescribirMedPreparado_fk2
-DROP CONSTRAINT PreescribirMedPreparado_fk2,
--- Se añade la fk con la referencia corregida PreescribirMedPreparado_fk2
-ADD CONSTRAINT PreescribirMedPreparado_fk2 FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
-ON UPDATE CASCADE ON DELETE RESTRICT;
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE PrescribirMedPreparado IS 'Detalle de medicamentos preparados recetados.';
+COMMENT ON CONSTRAINT PrescribirMedPreparado_fk1 ON PrescribirMedPreparado IS 'Llave foránea (compuesta): Receta que incluye la prescripción.';
+COMMENT ON CONSTRAINT PrescribirMedPreparado_fk2 ON PrescribirMedPreparado IS 'Llave foránea: Medicamento preparado recetado.';
 

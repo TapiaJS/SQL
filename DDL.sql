@@ -961,6 +961,12 @@ ALTER COLUMN Descripcion SET NOT NULL,
 ALTER COLUMN NombreGenerico SET NOT NULL,
 ALTER COLUMN LabFabricante SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE MedComercial IS 'Catálogo de medicamentos comerciales de patente.';
+COMMENT ON CONSTRAINT MedComercial_pk ON MedComercial IS 'Llave primaria: Identificador único del medicamento comercial.';
+
 
 -- Tabla 2
 CREATE TABLE MedPreparado (
@@ -993,6 +999,12 @@ ALTER COLUMN Descripcion SET NOT NULL,
 
 
 ALTER COLUMN Categoria SET NOT NULL;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE MedPreparado IS 'Catálogo de fórmulas magistrales preparadas en la farmacia.';
+COMMENT ON CONSTRAINT MedPreparado_pk ON MedPreparado IS 'Llave primaria: Identificador de la fórmula magistral.';
 
 
 -- Tabla 3
@@ -1029,6 +1041,12 @@ ALTER COLUMN Temperatura SET NOT NULL,
 ALTER COLUMN Sensibilidad SET NOT NULL,
 ALTER COLUMN Observaciones SET NOT NULL;
 
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Insumo IS 'Catálogo de materias primas e insumos necesarios para fórmulas magistrales.';
+COMMENT ON CONSTRAINT Insumo_pk ON Insumo IS 'Llave primaria: Identificador del insumo o materia prima.';
+
 
 -- Tabla 4
 CREATE TABLE Elaborar (
@@ -1064,6 +1082,14 @@ ADD CONSTRAINT Elaborar_d1 CHECK (CantidadElaborada > 0);
 ALTER TABLE Elaborar 
 DROP CONSTRAINT Elaborar_pk;
 
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Elaborar IS 'Relación que registra la fabricación física de lotes de medicamentos preparados.';
+COMMENT ON CONSTRAINT Elaborar_fk1 ON Elaborar IS 'Llave foránea: Farmacéutico responsable de la elaboración.';
+COMMENT ON CONSTRAINT Elaborar_fk2 ON Elaborar IS 'Llave foránea: Fórmula magistral elaborada.';
+COMMENT ON CONSTRAINT Elaborar_d1 ON Elaborar IS 'Validación: La cantidad elaborada debe ser mayor a cero.';
+
 
 -- Tabla 5
 CREATE TABLE Contener (
@@ -1096,6 +1122,14 @@ ADD CONSTRAINT Contener_d1 CHECK (CantidadRequerida > 0);
 -- Se elimina la PK Conetener_pk
 ALTER TABLE Contener 
 DROP CONSTRAINT Contener_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Contener IS 'Relación que define la composición o receta de las fórmulas magistrales.';
+COMMENT ON CONSTRAINT Contener_fk1 ON Contener IS 'Llave foránea: Fórmula magistral a la que pertenecen los insumos.';
+COMMENT ON CONSTRAINT Contener_fk2 ON Contener IS 'Llave foránea: Insumo requerido para la preparación.';
+COMMENT ON CONSTRAINT Contener_d1 ON Contener IS 'Validación: La cantidad requerida del insumo debe ser positiva.';
 
 
 -- =================================================================

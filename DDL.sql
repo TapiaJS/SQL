@@ -1073,6 +1073,7 @@ ON UPDATE CASCADE ON DELETE RESTRICT;
 ALTER TABLE Elaborar
 ALTER COLUMN FechaElaboracion SET NOT NULL,
 ALTER COLUMN CantidadElaborada SET NOT NULL,
+
 ADD CONSTRAINT Elaborar_d1 CHECK (CantidadElaborada > 0);
 
 -- =================================================================
@@ -1114,6 +1115,7 @@ ON UPDATE CASCADE ON DELETE RESTRICT;
 -- Restricciones
 ALTER TABLE Contener
 ALTER COLUMN CantidadRequerida SET NOT NULL,
+
 ADD CONSTRAINT Contener_d1 CHECK (CantidadRequerida > 0);
 
 -- =================================================================
@@ -1304,10 +1306,13 @@ ALTER COLUMN FechaRecepcion SET NOT NULL,
 ALTER COLUMN FechaCaducidad SET NOT NULL,
 ALTER COLUMN CondicionesAlmacenamiento SET NOT NULL,
 ALTER COLUMN CantidadRecibida SET NOT NULL,
+
 ADD CONSTRAINT EntregarInsumo_d1 CHECK (CantidadRecibida > 0),
 ALTER COLUMN PrecioPublico SET NOT NULL,
+
 ADD CONSTRAINT EntregarInsumo_d2 CHECK (PrecioPublico >= 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
+
 ADD CONSTRAINT EntregarInsumo_d3 CHECK (PrecioUnitario >= 0);
 
 -- =================================================================
@@ -1357,13 +1362,16 @@ ALTER TABLE Cliente
 ALTER COLUMN Nombre SET NOT NULL,
 ALTER COLUMN Paterno SET NOT NULL,
 ALTER COLUMN FechaNacimiento SET NOT NULL,
+
 ADD CONSTRAINT Cliente_d1 CHECK (FechaNacimiento <= CURRENT_DATE),
 ALTER COLUMN Calle SET NOT NULL,
 ALTER COLUMN NumeroExterior SET NOT NULL,
+
 ADD CONSTRAINT Cliente_d2 CHECK (NumeroExterior > 0),
 ALTER COLUMN Colonia SET NOT NULL,
 ALTER COLUMN Estado SET NOT NULL,
 ALTER COLUMN MetodoPago SET NOT NULL,
+
 ADD CONSTRAINT Cliente_d3 CHECK (MetodoPago IN ('Tarjeta', 'Efectivo'));
 
 -- =================================================================
@@ -1372,8 +1380,19 @@ ADD CONSTRAINT Cliente_d3 CHECK (MetodoPago IN ('Tarjeta', 'Efectivo'));
 -- Se agrega restricción a Materno NOT NULL
 ALTER TABLE Cliente
 ALTER COLUMN Materno SET NOT NULL,
+
 -- Se agrega restricción a NumeroInterior CHECK es NULL o mayor a cero
 ADD CONSTRAINT Cliente_d4 CHECK (NumeroInterior IS NULL OR NumeroInterior > 0);
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Cliente IS 'Catálogo general de clientes de la farmacia.';
+COMMENT ON CONSTRAINT Cliente_pk ON Cliente IS 'Llave primaria: Identificador único del cliente.';
+COMMENT ON CONSTRAINT Cliente_d1 ON Cliente IS 'Validación: La fecha de nacimiento no puede ser futura.';
+COMMENT ON CONSTRAINT Cliente_d2 ON Cliente IS 'Validación: El número exterior debe ser positivo.';
+COMMENT ON CONSTRAINT Cliente_d3 ON Cliente IS 'Validación: Restringe los métodos de pago a Tarjeta o Efectivo.';
+COMMENT ON CONSTRAINT Cliente_d4 ON Cliente IS 'Validación: El número interior debe ser positivo si se proporciona.';
 
 
 -- Tabla 2
@@ -1397,10 +1416,19 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 -- Restricciones
 ALTER TABLE ClienteOnline
 ALTER COLUMN NombreUsuario SET NOT NULL,
+
 ADD CONSTRAINT Clienteonline_u1 UNIQUE (NombreUsuario),
 ALTER COLUMN Contraseña SET NOT NULL,
 ALTER COLUMN NumeroTarjeta SET NOT NULL,
 ALTER COLUMN FechaVencimiento SET NOT NULL;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE ClienteOnline IS 'Extensión de la tabla Cliente para usuarios con cuenta en línea.';
+COMMENT ON CONSTRAINT ClienteOnline_pk ON ClienteOnline IS 'Llave primaria: Identificador del cliente (Relación 1:1 con Cliente).';
+COMMENT ON CONSTRAINT ClienteOnline_fk ON ClienteOnline IS 'Llave foránea: Vinculación obligatoria con la entidad base Cliente.';
+COMMENT ON CONSTRAINT Clienteonline_u1 ON ClienteOnline IS 'Restricción: El nombre de usuario debe ser único en el sistema.';
 
 
 -- Tabla 3
@@ -1433,10 +1461,13 @@ ALTER TABLE Ticket
 ALTER COLUMN FechaPago SET NOT NULL,
 ALTER COLUMN HoraPago SET NOT NULL,
 ALTER COLUMN TipoVenta SET NOT NULL,
+
 ADD CONSTRAINT Ticket_d1 CHECK (TipoVenta IN ('Presencial', 'Web')),
 ALTER COLUMN PrecioBruto SET NOT NULL,
+
 ADD CONSTRAINT Ticket_d2 CHECK (PrecioBruto >= 0),
 ALTER COLUMN PrecioNeto SET NOT NULL,
+
 ADD CONSTRAINT Ticket_d3 CHECK (PrecioNeto >= 0),
 ALTER COLUMN IdCliente SET NOT NULL,
 ALTER COLUMN IdSucursal SET NOT NULL;
@@ -1448,6 +1479,15 @@ ALTER COLUMN IdSucursal SET NOT NULL;
 ALTER TABLE Ticket 
     DROP COLUMN PrecioBruto,
     DROP COLUMN PrecioNeto;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Ticket IS 'Registro de transacciones de venta (tickets de compra).';
+COMMENT ON CONSTRAINT Ticket_pk ON Ticket IS 'Llave primaria: Folio único del ticket.';
+COMMENT ON CONSTRAINT Ticket_fk1 ON Ticket IS 'Llave foránea: Sucursal donde se realizó la venta.';
+COMMENT ON CONSTRAINT Ticket_fk2 ON Ticket IS 'Llave foránea: Cliente que realizó la compra.';
+COMMENT ON CONSTRAINT Ticket_d1 ON Ticket IS 'Validación: Restringe el tipo de venta a Presencial o Web.';
 
 
 -- Tabla 4
@@ -1467,8 +1507,16 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 
 -- Restricciones
 ALTER TABLE Telefonos_Cliente
+
 ADD CONSTRAINT Telefonos_Cliente_v CHECK (Telefono ~ '^(\+[0-9]{1,3})?[0-9]{10}$');
 
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Telefonos_Cliente IS 'Atributo multivaluado: Teléfonos de contacto de los clientes.';
+COMMENT ON CONSTRAINT Telefonos_Cliente_pk ON Telefonos_Cliente IS 'Llave primaria compuesta (IdCliente y teléfono).';
+COMMENT ON CONSTRAINT Telefonos_Cliente_fk ON Telefonos_Cliente IS 'Llave foránea: Vinculación con la tabla Cliente.';
+COMMENT ON CONSTRAINT Telefonos_Cliente_v ON Telefonos_Cliente IS 'Validación: Formato de número telefónico (10 dígitos, opcionalmente con código de país).';
 
 -- Tabla 5
 CREATE TABLE Correos_Cliente (
@@ -1488,6 +1536,14 @@ ON UPDATE CASCADE ON DELETE CASCADE;
 -- Restricciones
 ALTER TABLE Correos_Cliente
 ADD CONSTRAINT Correos_Cliente_v CHECK (Correo ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE Correos_Cliente IS 'Atributo multivaluado: Correos electrónicos de los clientes.';
+COMMENT ON CONSTRAINT Correos_Cliente_pk ON Correos_Cliente IS 'Llave primaria compuesta (IdCliente y correo).';
+COMMENT ON CONSTRAINT Correos_Cliente_fk ON Correos_Cliente IS 'Llave foránea: Vinculación con la tabla Cliente.';
+COMMENT ON CONSTRAINT Correos_Cliente_v ON Correos_Cliente IS 'Validación: Formato de correo electrónico.';
 
 
 -- Tabla 6
@@ -1514,8 +1570,10 @@ ON UPDATE CASCADE ON DELETE RESTRICT;
 -- Restricciones
 ALTER TABLE TenerMedComercial
 ALTER COLUMN CantidadComprada SET NOT NULL,
+
 ADD CONSTRAINT TenerMedComercial_d1 CHECK (CantidadComprada > 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
+
 ADD CONSTRAINT TenerMedComercial_d2 CHECK (PrecioUnitario >= 0);
 
 -- =================================================================
@@ -1524,6 +1582,15 @@ ADD CONSTRAINT TenerMedComercial_d2 CHECK (PrecioUnitario >= 0);
 -- Se elimina la PK EntregarInsumo_pk
 ALTER TABLE TenerMedComercial
 DROP CONSTRAINT TenerMedComercial_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE TenerMedComercial IS 'Detalle de los medicamentos comerciales incluidos en un ticket.';
+COMMENT ON CONSTRAINT TenerMedComercial_fk1 ON TenerMedComercial IS 'Llave foránea: Ticket al que pertenece el detalle.';
+COMMENT ON CONSTRAINT TenerMedComercial_fk2 ON TenerMedComercial IS 'Llave foránea: Medicamento comercial vendido.';
+COMMENT ON CONSTRAINT TenerMedComercial_d1 ON TenerMedComercial IS 'Validación: La cantidad comprada debe ser mayor a cero.';
+COMMENT ON CONSTRAINT TenerMedComercial_d2 ON TenerMedComercial IS 'Validación: El precio unitario no puede ser negativo.';
 
 
 -- Tabla 7
@@ -1550,8 +1617,10 @@ ON UPDATE CASCADE ON DELETE RESTRICT;
 -- Restricciones
 ALTER TABLE TenerMedPreparado
 ALTER COLUMN CantidadComprada SET NOT NULL,
+
 ADD CONSTRAINT TenerMedPreparado_d1 CHECK (CantidadComprada > 0),
 ALTER COLUMN PrecioUnitario SET NOT NULL,
+
 ADD CONSTRAINT TenerMedPreparado_d2 CHECK (PrecioUnitario >= 0);
 
 -- =================================================================
@@ -1560,6 +1629,15 @@ ADD CONSTRAINT TenerMedPreparado_d2 CHECK (PrecioUnitario >= 0);
 -- Se elimina la PK TenerMedPreparado_pk
 ALTER TABLE TenerMedPreparado 
 DROP CONSTRAINT TenerMedPreparado_pk;
+
+-- =================================================================
+--                      BLOQUE DE COMENTARIOS 
+-- =================================================================
+COMMENT ON TABLE TenerMedPreparado IS 'Detalle de los medicamentos preparados incluidos en un ticket.';
+COMMENT ON CONSTRAINT TenerMedPreparado_fk1 ON TenerMedPreparado IS 'Llave foránea: Ticket al que pertenece el detalle.';
+COMMENT ON CONSTRAINT TenerMedPreparado_fk2 ON TenerMedPreparado IS 'Llave foránea: Medicamento preparado vendido.';
+COMMENT ON CONSTRAINT TenerMedPreparado_d1 ON TenerMedPreparado IS 'Validación: La cantidad comprada debe ser mayor a cero.';
+COMMENT ON CONSTRAINT TenerMedPreparado_d2 ON TenerMedPreparado IS 'Validación: El precio unitario no puede ser negativo.';
 
 
 -- =================================================================

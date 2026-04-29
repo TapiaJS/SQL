@@ -307,7 +307,7 @@ COMMENT ON CONSTRAINT Farmaceutico_d3 ON Farmaceutico IS 'Validación: Número e
 -- Se agrega el atributo fecha de nacimiento y se agrega la restricción NOT NULL
 -- junto con la restricción CHECK FechaNacimiento <= CURRENT_DATE
 ALTER TABLE Farmaceutico
-ADD COLUMN FechaNacimiento NOT NULL,
+ADD COLUMN FechaNacimiento DATE NOT NULL,
 ADD CONSTRAINT Farmaceutico_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
 
 

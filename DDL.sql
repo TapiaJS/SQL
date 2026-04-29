@@ -301,6 +301,15 @@ COMMENT ON CONSTRAINT Farmaceutico_u1 ON Farmaceutico IS 'Restricción: Unicidad
 COMMENT ON CONSTRAINT Farmaceutico_d2 ON Farmaceutico IS 'Validación: Número interior válido.';
 COMMENT ON CONSTRAINT Farmaceutico_d3 ON Farmaceutico IS 'Validación: Número exterior positivo.';
 
+-- =================================================================
+--                    BLOQUE DE ADICIONES PARA P07 
+-- =================================================================
+-- Se agrega el atributo fecha de nacimiento y se agrega la restricción NOT NULL
+-- junto con la restricción CHECK FechaNacimiento <= CURRENT_DATE
+ALTER TABLE Farmaceutico
+ADD COLUMN FechaNacimiento NOT NULL,
+ADD CONSTRAINT Farmaceutico_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+
 
 -- Tabla 6
 CREATE TABLE Cajero (

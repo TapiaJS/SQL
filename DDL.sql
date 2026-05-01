@@ -163,6 +163,16 @@ COMMENT ON CONSTRAINT Medico_d2 ON Medico IS 'Validación: El número interior d
 COMMENT ON CONSTRAINT Medico_d3 ON Medico IS 'Validación: El número exterior debe ser estrictamente positivo.';
 
 
+-- =================================================================
+--                    BLOQUE DE ADICIONES PARA P07 
+-- =================================================================
+-- Se agrega el atributo fecha de nacimiento y se agrega la restricción NOT NULL
+-- junto con la restricción CHECK FechaNacimiento <= CURRENT_DATE
+ALTER TABLE Medico
+ADD COLUMN FechaNacimiento DATE NOT NULL,
+ADD CONSTRAINT Medico_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+
+
 -- Tabla 4
 CREATE TABLE Enfermero (
     RFC VARCHAR(13),
@@ -233,6 +243,16 @@ COMMENT ON CONSTRAINT Enfermero_d1 ON Enfermero IS 'Validación: El salario debe
 COMMENT ON CONSTRAINT Enfermero_u1 ON Enfermero IS 'Restricción: Unicidad de la cédula profesional del enfermero.';
 COMMENT ON CONSTRAINT Enfermero_d2 ON Enfermero IS 'Validación: Número interior positivo o nulo.';
 COMMENT ON CONSTRAINT Enfermero_d3 ON Enfermero IS 'Validación: Número exterior estrictamente positivo.';
+
+-- =================================================================
+--                    BLOQUE DE ADICIONES PARA P07 
+-- =================================================================
+-- Se agrega el atributo fecha de nacimiento y se agrega la restricción NOT NULL
+-- junto con la restricción CHECK FechaNacimiento <= CURRENT_DATE
+ALTER TABLE Enfermero
+ADD COLUMN FechaNacimiento DATE NOT NULL,
+ADD CONSTRAINT Enfermero_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+
 
 -- Tabla 5
 CREATE TABLE Farmaceutico (
@@ -374,6 +394,16 @@ COMMENT ON CONSTRAINT Cajero_d1 ON Cajero IS 'Validación: El salario debe ser m
 COMMENT ON CONSTRAINT Cajero_d2 ON Cajero IS 'Validación: Número interior válido.';
 COMMENT ON CONSTRAINT Cajero_d3 ON Cajero IS 'Validación: Número exterior estrictamente positivo.';
 
+-- =================================================================
+--                    BLOQUE DE ADICIONES PARA P07 
+-- =================================================================
+-- Se agrega el atributo fecha de nacimiento y se agrega la restricción NOT NULL
+-- junto con la restricción CHECK FechaNacimiento <= CURRENT_DATE
+ALTER TABLE Cajero
+ADD COLUMN FechaNacimiento DATE NOT NULL,
+ADD CONSTRAINT Cajero_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+
+
 -- Tabla 7
 CREATE TABLE Aseador (
     RFC VARCHAR(13),
@@ -437,6 +467,16 @@ COMMENT ON CONSTRAINT Aseador_d1 ON Aseador IS 'Validación: El salario debe ser
 COMMENT ON CONSTRAINT Aseador_d2 ON Aseador IS 'Validación: Número interior positivo o nulo.';
 COMMENT ON CONSTRAINT Aseador_d3 ON Aseador IS 'Validación: Número exterior estrictamente positivo.';
 
+-- =================================================================
+--                    BLOQUE DE ADICIONES PARA P07 
+-- =================================================================
+-- Se agrega el atributo fecha de nacimiento y se agrega la restricción NOT NULL
+-- junto con la restricción CHECK FechaNacimiento <= CURRENT_DATE
+ALTER TABLE Aseador
+ADD COLUMN FechaNacimiento DATE NOT NULL,
+ADD CONSTRAINT Aseador_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+
+
 -- Tabla 8
 CREATE TABLE Cuidador (
     RFC VARCHAR(13),
@@ -499,6 +539,16 @@ COMMENT ON CONSTRAINT Cuidador_fk ON Cuidador IS 'Llave foránea: Sucursal de ad
 COMMENT ON CONSTRAINT Cuidador_d1 ON Cuidador IS 'Validación: El salario debe ser estrictamente positivo.';
 COMMENT ON CONSTRAINT Cuidador_d2 ON Cuidador IS 'Validación: Número interior positivo o nulo.';
 COMMENT ON CONSTRAINT Cuidador_d3 ON Cuidador IS 'Validación: Número exterior estrictamente positivo.';
+
+-- =================================================================
+--                    BLOQUE DE ADICIONES PARA P07 
+-- =================================================================
+-- Se agrega el atributo fecha de nacimiento y se agrega la restricción NOT NULL
+-- junto con la restricción CHECK FechaNacimiento <= CURRENT_DATE
+ALTER TABLE Cuidador
+ADD COLUMN FechaNacimiento DATE NOT NULL,
+ADD CONSTRAINT Cuidador_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+
 
 -- Tabla 9
 CREATE TABLE Telefonos_Medico (

@@ -14,15 +14,6 @@ WHERE emc.FechaCaducidad > '2026-04-20'
   AND emc.FechaCaducidad < '2026-05-07';
 
 --Medicamentos preparados caducados por los insumos caducaron en esa fecha
-SELECT DISTINCT mp.* FROM MedPreparado mp
-JOIN Contener c ON mp.IdMedicamento = c.IdMedicamento
-JOIN EntregarInsumo ei ON c.IdInsumo = ei.IdInsumo
-WHERE ei.FechaCaducidad > '2026-04-20' 
-  AND ei.FechaCaducidad < '2026-05-07';
-
--- Opción B para los medicamentos preparados:
--- Muestra todos los medicamentos individuales en el stock, además muestra los mismos datos que la 
--- consulta de medicamentos comerciales
 SELECT
     mp.NombreComercial,
     ei.FechaCaducidad

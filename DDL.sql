@@ -171,6 +171,7 @@ COMMENT ON CONSTRAINT Medico_d3 ON Medico IS 'Validación: El número exterior d
 ALTER TABLE Medico
 ADD COLUMN FechaNacimiento DATE NOT NULL,
 ADD CONSTRAINT Medico_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+COMMENT ON CONSTRAINT Medico_d4 ON Medico IS 'Validación: La fecha de nacimiento no puede ser futura.';
 
 
 -- Tabla 4
@@ -252,6 +253,7 @@ COMMENT ON CONSTRAINT Enfermero_d3 ON Enfermero IS 'Validación: Número exterio
 ALTER TABLE Enfermero
 ADD COLUMN FechaNacimiento DATE NOT NULL,
 ADD CONSTRAINT Enfermero_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+COMMENT ON CONSTRAINT Enfermero_d4 ON Enfermero IS 'Validación: La fecha de nacimiento no puede ser futura.';
 
 
 -- Tabla 5
@@ -329,6 +331,7 @@ COMMENT ON CONSTRAINT Farmaceutico_d3 ON Farmaceutico IS 'Validación: Número e
 ALTER TABLE Farmaceutico
 ADD COLUMN FechaNacimiento DATE NOT NULL,
 ADD CONSTRAINT Farmaceutico_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+COMMENT ON CONSTRAINT Farmaceutico_d4 ON Farmaceutico IS 'Validación: La fecha de nacimiento no puede ser futura.';
 
 
 -- Tabla 6
@@ -402,6 +405,7 @@ COMMENT ON CONSTRAINT Cajero_d3 ON Cajero IS 'Validación: Número exterior estr
 ALTER TABLE Cajero
 ADD COLUMN FechaNacimiento DATE NOT NULL,
 ADD CONSTRAINT Cajero_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+COMMENT ON CONSTRAINT Cajero_d4 ON Cajero IS 'Validación: La fecha de nacimiento no puede ser futura.';
 
 
 -- Tabla 7
@@ -475,6 +479,7 @@ COMMENT ON CONSTRAINT Aseador_d3 ON Aseador IS 'Validación: Número exterior es
 ALTER TABLE Aseador
 ADD COLUMN FechaNacimiento DATE NOT NULL,
 ADD CONSTRAINT Aseador_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+COMMENT ON CONSTRAINT Aseador_d4 ON Aseador IS 'Validación: La fecha de nacimiento no puede ser futura.';
 
 
 -- Tabla 8
@@ -548,6 +553,7 @@ COMMENT ON CONSTRAINT Cuidador_d3 ON Cuidador IS 'Validación: Número exterior 
 ALTER TABLE Cuidador
 ADD COLUMN FechaNacimiento DATE NOT NULL,
 ADD CONSTRAINT Cuidador_d4 CHECK (FechaNacimiento <= CURRENT_DATE);
+COMMENT ON CONSTRAINT Cuidador_d4 ON Cuidador IS 'Validación: La fecha de nacimiento no puede ser futura.';
 
 
 -- Tabla 9

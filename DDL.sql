@@ -1766,6 +1766,14 @@ COMMENT ON CONSTRAINT Consulta_fk4 ON Consulta IS 'Llave foránea: Ticket de pag
 COMMENT ON CONSTRAINT Consulta_d1 ON Consulta IS 'Validación: El precio de la consulta no puede ser negativo.';
 COMMENT ON CONSTRAINT Consulta_u2 ON Consulta IS 'Restricción: Unicidad del ticket por consulta (1:1).';
 
+-- =================================================================
+--                    BLOQUE DE CORRECCIONES PARA P08 
+-- =================================================================
+-- Obligatoriedad del Cliente (Dominio)
+ALTER TABLE Consulta
+ALTER COLUMN IdCliente SET NOT NULL;
+-- Nota: RFCEnfermero se mantiene sin NOT NULL para permitir valores nulos 
+-- cuando no haya personal de enfermería asignado a la consulta.
 
 -- Tabla 2
 CREATE TABLE Receta(
@@ -1952,3 +1960,12 @@ COMMENT ON TABLE PrescribirMedPreparado IS 'Detalle de medicamentos preparados r
 COMMENT ON CONSTRAINT PrescribirMedPreparado_fk1 ON PrescribirMedPreparado IS 'Llave foránea (compuesta): Receta que incluye la prescripción.';
 COMMENT ON CONSTRAINT PrescribirMedPreparado_fk2 ON PrescribirMedPreparado IS 'Llave foránea: Medicamento preparado recetado.';
 
+-- =================================================================
+--                    BLOQUE DE CORRECCIONES PARA P08 
+-- =================================================================
+-- Eliminar la FK incorrecta que apuntaba a MedComercial
+ALTER TABLE PrescribirMedPreparado DROP CONSTRAINT PrescribirMedPreparado_fk2;
+-- Crear la FK correcta hacia MedPreparado con las políticas de mantenimiento
+ALTER TABLE PrescribirMedPreparado ADD CONSTRAINT PrescribirMedPreparado_fk2
+FOREIGN KEY (IdMedicamento) REFERENCES MedPreparado(IdMedicamento)
+ON UPDATE CASCADE ON DELETE RESTRICT;

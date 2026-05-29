@@ -339,4 +339,30 @@ LEFT JOIN EntregarInsumo ei
 GROUP BY p.IdProveedor, p.RazonSocial
 ORDER BY TotalCompras DESC;
 
+/* *CONSULTA 14: Farmacéutico con mayor producción de medicamentos preparados.
+ * *OBJETIVO:
+ * Determinar qué farmacéutico ha producido la mayor cantidad de fórmulas magistrales,
+ * sumando todas las unidades elaboradas en la farmacia.
+ * * FUNCIONAMIENTO:
+ * Se utiliza la tabla 'Elaborar' donde se registran las producciones de medicamentos preparados.
+ * Se realiza un JOIN con la tabla 'Farmaceutico' a través del campo RFC,
+ * para poder obtener el nombre del farmacéutico asociado a cada producción.
+ 
+ * SUM(e.CantidadElaborada) permite calcular el total de unidades producidas por cada farmacéutico.
+ *
+ * Los resultados se agrupan por el nombre del farmacéutico para consolidar su producción total.
+ *
+ * Finalmente, ORDER BY total_producido DESC ordena de mayor a menor producción,
+ * y LIMIT 1 devuelve únicamente al farmacéutico con mayor producción.
+ */
+
+SELECT 
+    f.Nombre,
+    SUM(e.CantidadElaborada) AS total_producido
+FROM Elaborar e
+JOIN Farmaceutico f 
+    ON e.RFC = f.RFC
+GROUP BY f.Nombre
+ORDER BY total_producido DESC
+LIMIT 1;
 

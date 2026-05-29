@@ -131,13 +131,13 @@ SELECT DISTINCT e.IdMedicamento, m.NombreComercial, e.PrecioUnitario AS CostoPro
 FROM EntregarMedComercial e
 INNER JOIN MedComercial m ON e.IdMedicamento = m.IdMedicamento;
 
-/* 
- * CONSULTA: Sucursales con mayor recepción de medicamentos comerciales.
- *
+/* *
+ * CONSULTA 8: Sucursales con mayor recepción de medicamentos comerciales.
+ **
  * OBJETIVO:
  * Mostrar qué sucursales reciben la mayor cantidad de medicamentos
  * comerciales para analizar la distribución de inventario.
- *
+ **
  * FUNCIONAMIENTO:
  * La consulta une 'Sucursal' con 'EntregarMedComercial'
  * usando IdSucursal. Después suma las cantidades recibidas

@@ -243,3 +243,34 @@ LEFT JOIN (
     ON s.IdSucursal = cu.IdSucursal
 
 ORDER BY TotalPersonal DESC;
+
+/*
+ * CONSULTA 10: Cálculo de gasto total de nómina por sucursal.
+ *
+ * OBJETIVO:
+ * Obtener el gasto total en nómina por sucursal sumando los salarios de todos los empleados
+ * (médicos, enfermeros, farmacéuticos, cajeros, aseadores y cuidadores).
+ *
+ * FUNCIONAMIENTO:
+ * Se realiza un LEFT JOIN desde la tabla Sucursal hacia cada una de las tablas de empleados.
+ * Luego se suman los salarios por tipo de empleado utilizando SUM() y COALESCE para evitar valores nulos.
+ * Finalmente se agrupan los resultados por sucursal y se ordenan de mayor a menor gasto de nómina.
+ */
+ 
+SELECT 
+    s.NombreSucursal,
+    COALESCE(SUM(m.Salario), 0) +
+    COALESCE(SUM(e.Salario), 0) +
+    COALESCE(SUM(f.Salario), 0) +
+    COALESCE(SUM(c.Salario), 0) +
+    COALESCE(SUM(a.Salario), 0) +
+    COALESCE(SUM(cu.Salario), 0) AS gasto_nomina
+FROM Sucursal s
+LEFT JOIN Medico m ON m.IdSucursal = s.IdSucursal
+LEFT JOIN Enfermero e ON e.IdSucursal = s.IdSucursal
+LEFT JOIN Farmaceutico f ON f.IdSucursal = s.IdSucursal
+LEFT JOIN Cajero c ON c.IdSucursal = s.IdSucursal
+LEFT JOIN Aseador a ON a.IdSucursal = s.IdSucursal
+LEFT JOIN Cuidador cu ON cu.IdSucursal = s.IdSucursal
+GROUP BY s.IdSucursal, s.NombreSucursal
+ORDER BY gasto_nomina DESC;

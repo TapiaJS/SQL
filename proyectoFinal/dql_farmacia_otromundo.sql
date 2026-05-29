@@ -306,3 +306,24 @@ SELECT
 FROM Sucursal
 GROUP BY Estado
 ORDER BY NumeroSucursales DESC;
+
+/* * CONSULTA 13: Medicamentos preparados más elaborados.
+ * * OBJETIVO:
+ * Identificar los medicamentos preparados que han sido elaborados en mayor cantidad total,
+ * con el fin de analizar cuáles fórmulas magistrales tienen mayor demanda de producción.
+ * * FUNCIONAMIENTO:
+ * Se realiza un JOIN entre la tabla 'MedPreparado' y 'Elaborar' mediante IdMedicamento,
+ * relacionando cada fórmula con sus registros de producción.
+ *
+ * SUM(CantidadElaborada) permite obtener el total de unidades producidas por cada medicamento.
+ *
+ * Los resultados se agrupan por medicamento y se ordenan de mayor a menor producción total
+ * para identificar los más elaborados.
+ */
+
+SELECT m.NombreComercial,
+       SUM(e.CantidadElaborada) AS total_producido
+FROM MedPreparado m
+JOIN Elaborar e ON m.IdMedicamento = e.IdMedicamento
+GROUP BY m.IdMedicamento, m.NombreComercial
+ORDER BY total_producido DESC;

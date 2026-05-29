@@ -151,4 +151,4 @@ FROM Sucursal s
 JOIN EntregarMedComercial emc
     ON s.IdSucursal = emc.IdSucursal
 GROUP BY s.IdSucursal, s.NombreSucursal
-ORDER BY TotalRecibido DESC;
+ORDER BY TotalRecibido DESC; 

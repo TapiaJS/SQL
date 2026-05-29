@@ -307,6 +307,7 @@ FROM Sucursal
 GROUP BY Estado
 ORDER BY NumeroSucursales DESC;
 
+<<<<<<< ours
 /* * CONSULTA 13: Total de compras realizadas a cada proveedor.
  * * OBJETIVO:
  * Obtener el total de productos (medicamentos comerciales e insumos)
@@ -338,3 +339,5 @@ LEFT JOIN EntregarInsumo ei
     ON p.IdProveedor = ei.IdProveedor
 GROUP BY p.IdProveedor, p.RazonSocial
 ORDER BY TotalCompras DESC;
+=======
+>>>>>>> theirs

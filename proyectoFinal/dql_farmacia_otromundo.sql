@@ -133,12 +133,10 @@ INNER JOIN MedComercial m ON e.IdMedicamento = m.IdMedicamento;
 
 /* *
  * CONSULTA 8: Sucursales con mayor recepción de medicamentos comerciales.
- **
- * OBJETIVO:
+ * * OBJETIVO:
  * Mostrar qué sucursales reciben la mayor cantidad de medicamentos
  * comerciales para analizar la distribución de inventario.
- **
- * FUNCIONAMIENTO:
+ * * FUNCIONAMIENTO:
  * La consulta une 'Sucursal' con 'EntregarMedComercial'
  * usando IdSucursal. Después suma las cantidades recibidas
  * por sucursal y ordena de mayor a menor.
@@ -152,3 +150,96 @@ JOIN EntregarMedComercial emc
     ON s.IdSucursal = emc.IdSucursal
 GROUP BY s.IdSucursal, s.NombreSucursal
 ORDER BY TotalRecibido DESC; 
+
+
+/* *
+ * CONSULTA 9: Total de personal en sucursales con clínica.
+ * * OBJETIVO:
+ * Mostrar cuántos empleados trabajan en las sucursales
+ * que cuentan con clínica para analizar su capacidad operativa.
+ * * FUNCIONAMIENTO:
+ * La consulta primero obtiene únicamente las sucursales que
+ * tienen clínica mediante un INNER JOIN entre 'Sucursal'
+ * y 'Clinica'.
+ *
+ * Después, para evitar duplicar registros al unir muchas tablas
+ * de personal al mismo tiempo, se realizan subconsultas
+ * independientes para cada tipo de empleado
+ * (Médico, Enfermero, Farmacéutico, Cajero, Aseador y Cuidador).
+ *
+ * Cada subconsulta agrupa por sucursal y cuenta el número
+ * de trabajadores existentes.
+ *
+ * Finalmente, todos los resultados se unen con LEFT JOIN
+ * sobre la tabla 'Sucursal' y se suman usando COALESCE
+ * para reemplazar valores NULL por cero en caso de que
+ * una sucursal no tenga cierto tipo de personal.
+ */
+
+SELECT s.IdSucursal,
+       s.NombreSucursal,
+
+       COALESCE(m.TotalMedicos, 0) AS Medicos,
+       COALESCE(e.TotalEnfermeros, 0) AS Enfermeros,
+       COALESCE(f.TotalFarmaceuticos, 0) AS Farmaceuticos,
+       COALESCE(c.TotalCajeros, 0) AS Cajeros,
+       COALESCE(a.TotalAseadores, 0) AS Aseadores,
+       COALESCE(cu.TotalCuidadores, 0) AS Cuidadores,
+
+       (
+           COALESCE(m.TotalMedicos, 0) +
+           COALESCE(e.TotalEnfermeros, 0) +
+           COALESCE(f.TotalFarmaceuticos, 0) +
+           COALESCE(c.TotalCajeros, 0) +
+           COALESCE(a.TotalAseadores, 0) +
+           COALESCE(cu.TotalCuidadores, 0)
+       ) AS TotalPersonal
+
+FROM Sucursal s
+
+INNER JOIN Clinica cl
+    ON s.IdSucursal = cl.IdSucursal
+
+LEFT JOIN (
+    SELECT IdSucursal, COUNT(*) AS TotalMedicos
+    FROM Medico
+    GROUP BY IdSucursal
+) m
+    ON s.IdSucursal = m.IdSucursal
+
+LEFT JOIN (
+    SELECT IdSucursal, COUNT(*) AS TotalEnfermeros
+    FROM Enfermero
+    GROUP BY IdSucursal
+) e
+    ON s.IdSucursal = e.IdSucursal
+
+LEFT JOIN (
+    SELECT IdSucursal, COUNT(*) AS TotalFarmaceuticos
+    FROM Farmaceutico
+    GROUP BY IdSucursal
+) f
+    ON s.IdSucursal = f.IdSucursal
+
+LEFT JOIN (
+    SELECT IdSucursal, COUNT(*) AS TotalCajeros
+    FROM Cajero
+    GROUP BY IdSucursal
+) c
+    ON s.IdSucursal = c.IdSucursal
+
+LEFT JOIN (
+    SELECT IdSucursal, COUNT(*) AS TotalAseadores
+    FROM Aseador
+    GROUP BY IdSucursal
+) a
+    ON s.IdSucursal = a.IdSucursal
+
+LEFT JOIN (
+    SELECT IdSucursal, COUNT(*) AS TotalCuidadores
+    FROM Cuidador
+    GROUP BY IdSucursal
+) cu
+    ON s.IdSucursal = cu.IdSucursal
+
+ORDER BY TotalPersonal DESC;

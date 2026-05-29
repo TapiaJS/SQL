@@ -82,3 +82,51 @@ FROM Enfermero e
 INNER JOIN Sucursal s ON e.IdSucursal = s.IdSucursal
 WHERE e.CertificacionReanimacion = TRUE
 ORDER BY s.IdSucursal, e.Entrada;
+
+
+/* * CONSULTA 5: Medicamentos comerciales que están próximos a caducar y el NombreSucursal de la Sucursal donde se ubican.
+ * * OBJETIVO:
+ * Lista los medicamentos comerciales cuya fecha de caducidad esté dentro de los próximos 30 días para gestionar su salida o reemplazo.
+ * * FUNCIONAMIENTO:
+ * Realiza un INNER JOIN entre la tabla 'EntregarMedComercial' y la tabla 'Sucursal' para identificar la ubicación física del
+ * inventario.
+ * Aplica un filtro de rango (BETWEEN) para aislar los productos que expiran entre el día de hoy y los siguientes 30 días, ordenando el reporte
+ * de forma ascendente por la fecha de caducidad para priorizar los lotes más críticos.
+ */
+SELECT e.IdMedicamento, s.NombreSucursal, e.FechaCaducidad, e.CantidadRecibida, e.CondicionesAlmacenamiento
+FROM EntregarMedComercial e
+INNER JOIN Sucursal s ON e.IdSucursal = s.IdSucursal
+WHERE e.FechaCaducidad BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '30 days'
+ORDER BY e.FechaCaducidad ASC;
+
+
+/* * CONSULTA 6: Medicamentos comerciales ya caducados y el NombreSucursal de la Sucursal donde se encuentran.
+ * * OBJETIVO:
+ * Lista los medicamentos comerciales que ya han vencido para coordinar su retiro inmediato de los estantes de las sucursales.
+ * * FUNCIONAMIENTO:
+ * Realiza un INNER JOIN entre la tabla 'EntregarMedComercial' y la tabla 'Sucursal' para identificar la ubicación física del
+ * inventario.
+ * Aplica un filtro para aislar únicamente aquellos productos cuya fecha de caducidad sea estrictamente menor a la fecha actual y ordena
+ * los resultados de manera descendente, mostrando en primer lugar el inventario que ha expirado más recientemente.
+ */
+SELECT e.IdMedicamento, s.NombreSucursal, e.FechaCaducidad, e.CantidadRecibida, e.CondicionesAlmacenamiento
+FROM EntregarMedComercial e
+INNER JOIN Sucursal s ON e.IdSucursal = s.IdSucursal
+WHERE e.FechaCaducidad < CURRENT_DATE
+ORDER BY e.FechaCaducidad DESC;
+
+
+/* * CONSULTA 7: Margen de ganancia bruta por Medicamento Comercial.
+ * * OBJETIVO:
+ * Muestra el margen de ganancia bruta por Medicamento Comercial restando el PrecioUnitario (costo de proveedor) al PrecioPublico.
+ * * FUNCIONAMIENTO:
+ * Realiza un INNER JOIN entre la tabla 'EntregarMedComercial' y la tabla 'MedComercial' para asociar cada registro con el nombre
+ * del producto en el catálogo. Utiliza la cláusula DISTINCT para aislar las diferentes combinaciones de precios, calcula la ganancia
+ * bruta restando el costo al precio de venta, y obtiene el porcentaje de margen dividiendo dicha ganancia entre el costo del proveedor,
+ * y multiplicando por 100 para terminar aplicando ROUND que limita el resultado a dos decimales.
+ */
+SELECT DISTINCT e.IdMedicamento, m.NombreComercial, e.PrecioUnitario AS CostoProveedor, e.PrecioPublico AS PrecioVenta,
+       (e.PrecioPublico - e.PrecioUnitario) AS GananciaBrutaUnitaria,
+       ROUND(((e.PrecioPublico - e.PrecioUnitario) / e.PrecioUnitario) * 100, 2) AS PorcentajeMargen
+FROM EntregarMedComercial e
+INNER JOIN MedComercial m ON e.IdMedicamento = m.IdMedicamento;

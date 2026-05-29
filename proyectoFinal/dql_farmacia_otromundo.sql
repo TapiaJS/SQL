@@ -131,8 +131,7 @@ SELECT DISTINCT e.IdMedicamento, m.NombreComercial, e.PrecioUnitario AS CostoPro
 FROM EntregarMedComercial e
 INNER JOIN MedComercial m ON e.IdMedicamento = m.IdMedicamento;
 
-/* *
- * CONSULTA 8: Sucursales con mayor recepción de medicamentos comerciales.
+/* * CONSULTA 8: Sucursales con mayor recepción de medicamentos comerciales.
  * * OBJETIVO:
  * Mostrar qué sucursales reciben la mayor cantidad de medicamentos
  * comerciales para analizar la distribución de inventario.
@@ -152,8 +151,7 @@ GROUP BY s.IdSucursal, s.NombreSucursal
 ORDER BY TotalRecibido DESC; 
 
 
-/* *
- * CONSULTA 9: Total de personal en sucursales con clínica.
+/* * CONSULTA 9: Total de personal en sucursales con clínica.
  * * OBJETIVO:
  * Mostrar cuántos empleados trabajan en las sucursales
  * que cuentan con clínica para analizar su capacidad operativa.
@@ -244,19 +242,16 @@ LEFT JOIN (
 
 ORDER BY TotalPersonal DESC;
 
-/*
- * CONSULTA 10: Cálculo de gasto total de nómina por sucursal.
- *
- * OBJETIVO:
+/* * CONSULTA 10: Cálculo de gasto total de nómina por sucursal.
+ * * OBJETIVO:
  * Obtener el gasto total en nómina por sucursal sumando los salarios de todos los empleados
  * (médicos, enfermeros, farmacéuticos, cajeros, aseadores y cuidadores).
- *
- * FUNCIONAMIENTO:
+ * * FUNCIONAMIENTO:
  * Se realiza un LEFT JOIN desde la tabla Sucursal hacia cada una de las tablas de empleados.
  * Luego se suman los salarios por tipo de empleado utilizando SUM() y COALESCE para evitar valores nulos.
  * Finalmente se agrupan los resultados por sucursal y se ordenan de mayor a menor gasto de nómina.
  */
- 
+
 SELECT 
     s.NombreSucursal,
     COALESCE(SUM(m.Salario), 0) +
@@ -274,3 +269,40 @@ LEFT JOIN Aseador a ON a.IdSucursal = s.IdSucursal
 LEFT JOIN Cuidador cu ON cu.IdSucursal = s.IdSucursal
 GROUP BY s.IdSucursal, s.NombreSucursal
 ORDER BY gasto_nomina DESC;
+
+/* * CONSULTA 11: Medicamentos preparados más elaborados en la farmacia.
+ * * OBJETIVO:
+ * Identificar cuáles medicamentos preparados se han elaborado con mayor frecuencia y en mayor cantidad total,
+ * con el fin de analizar la demanda de producción de fórmulas magistrales.
+ * * FUNCIONAMIENTO:
+ * Se realiza un JOIN entre la tabla 'MedPreparado' y 'Elaborar' para relacionar cada fórmula con sus registros de producción.
+ * COUNT(e.IdMedicamento) permite calcular cuántas veces ha sido elaborado cada medicamento.
+ * SUM(e.CantidadElaborada) obtiene el total de unidades producidas por medicamento.
+ * Finalmente, los resultados se agrupan por medicamento y se ordenan de mayor a menor producción total.
+ */
+
+SELECT 
+    m.NombreComercial,
+    COUNT(e.IdMedicamento) AS veces_elaborado,
+    SUM(e.CantidadElaborada) AS total_producido
+FROM MedPreparado m
+JOIN Elaborar e ON m.IdMedicamento = e.IdMedicamento
+GROUP BY m.IdMedicamento, m.NombreComercial
+ORDER BY total_producido DESC;
+
+/* * CONSULTA 12: Sucursales por estado.
+ * * OBJETIVO:
+ * Conocer cuántas sucursales existen en cada estado, con el fin de analizar su distribución geográfica.
+ * * FUNCIONAMIENTO:
+ * Se selecciona el campo 'Estado' de la tabla 'Sucursal'.
+ * COUNT(*) permite contar el número total de sucursales registradas por cada estado.
+ * GROUP BY agrupa los registros por estado para poder hacer el conteo.
+ * ORDER BY ordena los resultados de mayor a menor número de sucursales.
+ */
+
+SELECT 
+    Estado,
+    COUNT(*) AS NumeroSucursales
+FROM Sucursal
+GROUP BY Estado
+ORDER BY NumeroSucursales DESC;

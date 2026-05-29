@@ -130,3 +130,25 @@ SELECT DISTINCT e.IdMedicamento, m.NombreComercial, e.PrecioUnitario AS CostoPro
        ROUND(((e.PrecioPublico - e.PrecioUnitario) / e.PrecioUnitario) * 100, 2) AS PorcentajeMargen
 FROM EntregarMedComercial e
 INNER JOIN MedComercial m ON e.IdMedicamento = m.IdMedicamento;
+
+/* 
+ * CONSULTA: Sucursales con mayor recepción de medicamentos comerciales.
+ *
+ * OBJETIVO:
+ * Mostrar qué sucursales reciben la mayor cantidad de medicamentos
+ * comerciales para analizar la distribución de inventario.
+ *
+ * FUNCIONAMIENTO:
+ * La consulta une 'Sucursal' con 'EntregarMedComercial'
+ * usando IdSucursal. Después suma las cantidades recibidas
+ * por sucursal y ordena de mayor a menor.
+ */
+
+SELECT s.IdSucursal,
+       s.NombreSucursal,
+       SUM(emc.CantidadRecibida) AS TotalRecibido
+FROM Sucursal s
+JOIN EntregarMedComercial emc
+    ON s.IdSucursal = emc.IdSucursal
+GROUP BY s.IdSucursal, s.NombreSucursal
+ORDER BY TotalRecibido DESC;

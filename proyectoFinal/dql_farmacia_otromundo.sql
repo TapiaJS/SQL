@@ -307,23 +307,34 @@ FROM Sucursal
 GROUP BY Estado
 ORDER BY NumeroSucursales DESC;
 
-/* * CONSULTA 13: Medicamentos preparados más elaborados.
+/* * CONSULTA 13: Total de compras realizadas a cada proveedor.
  * * OBJETIVO:
- * Identificar los medicamentos preparados que han sido elaborados en mayor cantidad total,
- * con el fin de analizar cuáles fórmulas magistrales tienen mayor demanda de producción.
+ * Obtener el total de productos (medicamentos comerciales e insumos)
+ * que cada proveedor ha suministrado a la farmacia, con el fin de analizar
+ * cuáles proveedores tienen mayor participación en el abastecimiento.
  * * FUNCIONAMIENTO:
- * Se realiza un JOIN entre la tabla 'MedPreparado' y 'Elaborar' mediante IdMedicamento,
- * relacionando cada fórmula con sus registros de producción.
+ * Se realiza un LEFT JOIN entre la tabla 'Proveedor' y las tablas
+ * 'EntregarMedComercial' y 'EntregarInsumo' para incluir a todos los proveedores,
+ * incluso aquellos que no han realizado entregas.
  *
- * SUM(CantidadElaborada) permite obtener el total de unidades producidas por cada medicamento.
+ * SUM(CantidadRecibida) permite calcular el total de unidades entregadas
+ * por cada proveedor en ambas categorías.
  *
- * Los resultados se agrupan por medicamento y se ordenan de mayor a menor producción total
- * para identificar los más elaborados.
+ * COALESCE se utiliza para evitar valores NULL cuando un proveedor no tiene registros
+ * en alguna de las tablas de entrega.
+ *
+ * Finalmente, los resultados se agrupan por proveedor y se ordenan de mayor a menor
+ * según el total de compras realizadas.
  */
 
-SELECT m.NombreComercial,
-       SUM(e.CantidadElaborada) AS total_producido
-FROM MedPreparado m
-JOIN Elaborar e ON m.IdMedicamento = e.IdMedicamento
-GROUP BY m.IdMedicamento, m.NombreComercial
-ORDER BY total_producido DESC;
+SELECT p.IdProveedor,
+       p.RazonSocial,
+       COALESCE(SUM(emc.CantidadRecibida), 0) +
+       COALESCE(SUM(ei.CantidadRecibida), 0) AS TotalCompras
+FROM Proveedor p
+LEFT JOIN EntregarMedComercial emc
+    ON p.IdProveedor = emc.IdProveedor
+LEFT JOIN EntregarInsumo ei
+    ON p.IdProveedor = ei.IdProveedor
+GROUP BY p.IdProveedor, p.RazonSocial
+ORDER BY TotalCompras DESC;

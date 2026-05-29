@@ -356,6 +356,7 @@ ORDER BY TotalCompras DESC;
  * y LIMIT 1 devuelve únicamente al farmacéutico con mayor producción.
  */
 
+
 SELECT 
     f.Nombre,
     SUM(e.CantidadElaborada) AS total_producido

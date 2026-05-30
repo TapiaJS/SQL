@@ -86,17 +86,17 @@ ORDER BY s.IdSucursal, e.Entrada;
 
 /* * CONSULTA 5: Medicamentos comerciales que están próximos a caducar y el NombreSucursal de la Sucursal donde se ubican.
  * * OBJETIVO:
- * Lista los medicamentos comerciales cuya fecha de caducidad esté dentro de los próximos 30 días para gestionar su salida o reemplazo.
+ * Lista los medicamentos comerciales cuya fecha de caducidad esté dentro de los próximos 180 días para gestionar su salida o reemplazo.
  * * FUNCIONAMIENTO:
  * Realiza un INNER JOIN entre la tabla 'EntregarMedComercial' y la tabla 'Sucursal' para identificar la ubicación física del
  * inventario.
- * Aplica un filtro de rango (BETWEEN) para aislar los productos que expiran entre el día de hoy y los siguientes 30 días, ordenando el reporte
+ * Aplica un filtro de rango (BETWEEN) para aislar los productos que expiran entre el día de hoy y los siguientes 180 días, ordenando el reporte
  * de forma ascendente por la fecha de caducidad para priorizar los lotes más críticos.
  */
 SELECT e.IdMedicamento, s.NombreSucursal, e.FechaCaducidad, e.CantidadRecibida, e.CondicionesAlmacenamiento
 FROM EntregarMedComercial e
 INNER JOIN Sucursal s ON e.IdSucursal = s.IdSucursal
-WHERE e.FechaCaducidad BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '30 days'
+WHERE e.FechaCaducidad BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '180 days'
 ORDER BY e.FechaCaducidad ASC;
 
 
@@ -131,6 +131,7 @@ SELECT DISTINCT e.IdMedicamento, m.NombreComercial, e.PrecioUnitario AS CostoPro
 FROM EntregarMedComercial e
 INNER JOIN MedComercial m ON e.IdMedicamento = m.IdMedicamento;
 
+
 /* * CONSULTA 8: Sucursales con mayor recepción de medicamentos comerciales.
  * * OBJETIVO:
  * Mostrar qué sucursales reciben la mayor cantidad de medicamentos
@@ -140,7 +141,6 @@ INNER JOIN MedComercial m ON e.IdMedicamento = m.IdMedicamento;
  * usando IdSucursal. Después suma las cantidades recibidas
  * por sucursal y ordena de mayor a menor.
  */
-
 SELECT s.IdSucursal,
        s.NombreSucursal,
        SUM(emc.CantidadRecibida) AS TotalRecibido
@@ -173,7 +173,6 @@ ORDER BY TotalRecibido DESC;
  * para reemplazar valores NULL por cero en caso de que
  * una sucursal no tenga cierto tipo de personal.
  */
-
 SELECT s.IdSucursal,
        s.NombreSucursal,
 
@@ -242,6 +241,7 @@ LEFT JOIN (
 
 ORDER BY TotalPersonal DESC;
 
+-- Es igual a la 1 peor en este caso infla los valores por un producto cartesiano
 /* * CONSULTA 10: Cálculo de gasto total de nómina por sucursal.
  * * OBJETIVO:
  * Obtener el gasto total en nómina por sucursal sumando los salarios de todos los empleados
@@ -251,7 +251,6 @@ ORDER BY TotalPersonal DESC;
  * Luego se suman los salarios por tipo de empleado utilizando SUM() y COALESCE para evitar valores nulos.
  * Finalmente se agrupan los resultados por sucursal y se ordenan de mayor a menor gasto de nómina.
  */
-
 SELECT 
     s.NombreSucursal,
     COALESCE(SUM(m.Salario), 0) +
@@ -270,6 +269,7 @@ LEFT JOIN Cuidador cu ON cu.IdSucursal = s.IdSucursal
 GROUP BY s.IdSucursal, s.NombreSucursal
 ORDER BY gasto_nomina DESC;
 
+
 /* * CONSULTA 11: Medicamentos preparados más elaborados en la farmacia.
  * * OBJETIVO:
  * Identificar cuáles medicamentos preparados se han elaborado con mayor frecuencia y en mayor cantidad total,
@@ -280,7 +280,6 @@ ORDER BY gasto_nomina DESC;
  * SUM(e.CantidadElaborada) obtiene el total de unidades producidas por medicamento.
  * Finalmente, los resultados se agrupan por medicamento y se ordenan de mayor a menor producción total.
  */
-
 SELECT 
     m.NombreComercial,
     COUNT(e.IdMedicamento) AS veces_elaborado,
@@ -290,6 +289,8 @@ JOIN Elaborar e ON m.IdMedicamento = e.IdMedicamento
 GROUP BY m.IdMedicamento, m.NombreComercial
 ORDER BY total_producido DESC;
 
+
+-- solo da 31 tuplas
 /* * CONSULTA 12: Sucursales por estado.
  * * OBJETIVO:
  * Conocer cuántas sucursales existen en cada estado, con el fin de analizar su distribución geográfica.
@@ -299,13 +300,13 @@ ORDER BY total_producido DESC;
  * GROUP BY agrupa los registros por estado para poder hacer el conteo.
  * ORDER BY ordena los resultados de mayor a menor número de sucursales.
  */
-
 SELECT 
     Estado,
     COUNT(*) AS NumeroSucursales
 FROM Sucursal
 GROUP BY Estado
 ORDER BY NumeroSucursales DESC;
+
 
 /* * CONSULTA 13: Total de compras realizadas a cada proveedor.
  * * OBJETIVO:
@@ -326,7 +327,6 @@ ORDER BY NumeroSucursales DESC;
  * Finalmente, los resultados se agrupan por proveedor y se ordenan de mayor a menor
  * según el total de compras realizadas.
  */
-
 SELECT p.IdProveedor,
        p.RazonSocial,
        COALESCE(SUM(emc.CantidadRecibida), 0) +
@@ -339,24 +339,23 @@ LEFT JOIN EntregarInsumo ei
 GROUP BY p.IdProveedor, p.RazonSocial
 ORDER BY TotalCompras DESC;
 
-/* *CONSULTA 14: Farmacéutico con mayor producción de medicamentos preparados.
+
+/* *CONSULTA 14: 50 Farmacéuticos con mayor producción de medicamentos preparados.
  * *OBJETIVO:
- * Determinar qué farmacéutico ha producido la mayor cantidad de fórmulas magistrales,
+ * Determinar qué farmacéuticos han producido la mayor cantidad de fórmulas magistrales,
  * sumando todas las unidades elaboradas en la farmacia.
  * * FUNCIONAMIENTO:
  * Se utiliza la tabla 'Elaborar' donde se registran las producciones de medicamentos preparados.
  * Se realiza un JOIN con la tabla 'Farmaceutico' a través del campo RFC,
  * para poder obtener el nombre del farmacéutico asociado a cada producción.
- 
+ *
  * SUM(e.CantidadElaborada) permite calcular el total de unidades producidas por cada farmacéutico.
  *
  * Los resultados se agrupan por el nombre del farmacéutico para consolidar su producción total.
  *
  * Finalmente, ORDER BY total_producido DESC ordena de mayor a menor producción,
- * y LIMIT 1 devuelve únicamente al farmacéutico con mayor producción.
+ * y LIMIT 50 para devolver únicamente a los 50 farmacéuticos con mayor producción.
  */
-
-
 SELECT 
     f.Nombre,
     SUM(e.CantidadElaborada) AS total_producido
@@ -365,5 +364,5 @@ JOIN Farmaceutico f
     ON e.RFC = f.RFC
 GROUP BY f.Nombre
 ORDER BY total_producido DESC
-LIMIT 1;
+LIMIT 50;
 

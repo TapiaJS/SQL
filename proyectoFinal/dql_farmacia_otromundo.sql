@@ -241,33 +241,35 @@ LEFT JOIN (
 
 ORDER BY TotalPersonal DESC;
 
--- Es igual a la 1 peor en este caso infla los valores por un producto cartesiano
-/* * CONSULTA 10: Cálculo de gasto total de nómina por sucursal.
+
+/* * CONSULTA 10: Historial de compras por cliente diferenciando medicamentos comerciales vs preparados.
  * * OBJETIVO:
- * Obtener el gasto total en nómina por sucursal sumando los salarios de todos los empleados
- * (médicos, enfermeros, farmacéuticos, cajeros, aseadores y cuidadores).
+ * Generar un informe comercial y financiero detallado por cada cliente de la organización para analizar
+ * el volumen de unidades adquiridas y el capital invertido en medicamentos comerciales frente a fórmulas preparadas.
  * * FUNCIONAMIENTO:
- * Se realiza un LEFT JOIN desde la tabla Sucursal hacia cada una de las tablas de empleados.
- * Luego se suman los salarios por tipo de empleado utilizando SUM() y COALESCE para evitar valores nulos.
- * Finalmente se agrupan los resultados por sucursal y se ordenan de mayor a menor gasto de nómina.
+ * Vincula de forma interna las tablas 'Cliente', 'Ticket' y 'Sucursal' para segmentar geográficamente la actividad del usuario.
+ * Incorpora operaciones LEFT JOIN hacia las tablas de transacciones específicas 'TenerMedComercial' y 'TenerMedPreparado' para
+ * evitar exclusiones de filas. Emplea funciones de agregación (SUM) combinadas con estructuras COALESCE para consolidar de manera
+ * aislada los conteos de piezas y montos económicos monetarios, agrupando los registros por el identificador único del cliente
+ * y ordenando el listado final de forma descendente en función del gasto total efectuado.
  */
-SELECT 
-    s.NombreSucursal,
-    COALESCE(SUM(m.Salario), 0) +
-    COALESCE(SUM(e.Salario), 0) +
-    COALESCE(SUM(f.Salario), 0) +
-    COALESCE(SUM(c.Salario), 0) +
-    COALESCE(SUM(a.Salario), 0) +
-    COALESCE(SUM(cu.Salario), 0) AS gasto_nomina
-FROM Sucursal s
-LEFT JOIN Medico m ON m.IdSucursal = s.IdSucursal
-LEFT JOIN Enfermero e ON e.IdSucursal = s.IdSucursal
-LEFT JOIN Farmaceutico f ON f.IdSucursal = s.IdSucursal
-LEFT JOIN Cajero c ON c.IdSucursal = s.IdSucursal
-LEFT JOIN Aseador a ON a.IdSucursal = s.IdSucursal
-LEFT JOIN Cuidador cu ON cu.IdSucursal = s.IdSucursal
-GROUP BY s.IdSucursal, s.NombreSucursal
-ORDER BY gasto_nomina DESC;
+SELECT
+cc.IdCliente,
+cc.Nombre || ' ' || cc.Paterno || ' ' || cc.Materno AS NombreCompleto,
+s.Estado AS EstadoSucursal,
+COALESCE(SUM(tmc.CantidadComprada), 0) AS TotalUnidadesComerciales,
+COALESCE(SUM(tmc.CantidadComprada * tmc.PrecioUnitario), 0) AS TotalGastoComercial,
+COALESCE(SUM(tmp.CantidadComprada), 0) AS TotalUnidadesPreparadas,
+COALESCE(SUM(tmp.CantidadComprada * tmp.PrecioUnitario), 0) AS TotalGastoPreparado,
+COALESCE(SUM(tmc.CantidadComprada * tmc.PrecioUnitario), 0) +
+COALESCE(SUM(tmp.CantidadComprada * tmp.PrecioUnitario), 0) AS GastoTotal
+FROM Cliente cc
+JOIN Ticket t ON cc.IdCliente = t.IdCliente
+JOIN Sucursal s ON t.IdSucursal = s.IdSucursal
+LEFT JOIN TenerMedComercial tmc ON t.FolioTicket = tmc.FolioTicket
+LEFT JOIN TenerMedPreparado tmp ON t.FolioTicket = tmp.FolioTicket
+GROUP BY cc.IdCliente, NombreCompleto, s.Estado
+ORDER BY GastoTotal DESC;
 
 
 /* * CONSULTA 11: Medicamentos preparados más elaborados en la farmacia.
@@ -365,4 +367,66 @@ JOIN Farmaceutico f
 GROUP BY f.Nombre
 ORDER BY total_producido DESC
 LIMIT 50;
+
+
+/* * CONSULTA 15: Listado detallado de todas las prescripciones (comerciales y preparadas) por consulta.
+ * * OBJETIVO:
+ * Generar un informe clínico unificado e individualizado que desglose el universo de medicamentos prescritos
+ * (tanto de catálogo comercial como fórmulas magistrales preparadas) asociados a cada folio de consulta médica.
+ * * FUNCIONAMIENTO:
+ * Emplea el operador de conjuntos UNION ALL para unificar de forma lineal dos subconsultas transaccionales de detalle.
+ * Ambas secciones interconectan las tablas 'CobrarConsulta', 'Receta', 'Cliente' y 'Medico' a través de operaciones JOIN.
+ * La primera mitad se acopla a 'PrescribirMedComercial' y 'MedComercial' para extraer los fármacos de patente; mientras
+ * que la segunda mitad se enlaza a 'PrescribirMedPreparado' y 'MedPreparado' para catalogar los compuestos personalizados,
+ * aplicando restricciones de nulidad (IS NOT NULL) para aislar registros válidos y ordenando cronológicamente el reporte final.
+ */
+ SELECT
+cc.Fecha,
+cc.Hora,
+cli.Nombre || ' ' || cli.Paterno || ' ' || cli.Materno AS Paciente,
+m.Nombre || ' ' || m.Paterno || ' ' || m.Materno AS Medico,
+r.NumeroReceta,
+r.Consultorio,
+r.Turno,
+'Comercial' AS TipoMedicamento,
+mc.NombreComercial AS Medicamento,
+pc.DosisPrescrita,
+pc.Frecuencia,
+pc.ViaAdministracionIndicada,
+pc.Duracion,
+cc.Diagnostico
+FROM CobrarConsulta cc
+JOIN Receta r ON cc.IdConsulta = r.IdConsulta
+JOIN Cliente cli ON cc.IdCliente = cli.IdCliente
+JOIN Medico m ON cc.RFCMedico = m.RFC
+LEFT JOIN PrescribirMedComercial pc ON r.IdConsulta = pc.IdConsulta AND r.NumeroReceta = pc.NumeroReceta
+LEFT JOIN MedComercial mc ON pc.IdMedicamento = mc.IdMedicamento
+WHERE pc.IdMedicamento IS NOT NULL
+
+UNION ALL
+
+SELECT
+cc.Fecha,
+cc.Hora,
+cli.Nombre || ' ' || cli.Paterno || ' ' || cli.Materno,
+m.Nombre || ' ' || m.Paterno || ' ' || m.Materno,
+r.NumeroReceta,
+r.Consultorio,
+r.Turno,
+'Preparado' AS TipoMedicamento,
+mp.NombreComercial AS Medicamento,
+pp.DosisPrescrita,
+pp.Frecuencia,
+pp.ViaAdministracionIndicada,
+pp.Duracion,
+cc.Diagnostico
+FROM CobrarConsulta cc
+JOIN Receta r ON cc.IdConsulta = r.IdConsulta
+JOIN Cliente cli ON cc.IdCliente = cli.IdCliente
+JOIN Medico m ON cc.RFCMedico = m.RFC
+LEFT JOIN PrescribirMedPreparado pp ON r.IdConsulta = pp.IdConsulta AND r.NumeroReceta = pp.NumeroReceta
+LEFT JOIN MedPreparado mp ON pp.IdMedicamento = mp.IdMedicamento
+WHERE pp.IdMedicamento IS NOT NULL
+
+ORDER BY Fecha, Hora, NumeroReceta;
 

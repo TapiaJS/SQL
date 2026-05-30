@@ -292,22 +292,56 @@ GROUP BY m.IdMedicamento, m.NombreComercial
 ORDER BY total_producido DESC;
 
 
--- solo da 31 tuplas
-/* * CONSULTA 12: Sucursales por estado.
+/* * CONSULTA 12: Todas las recepciones de inventario con proveedor, sucursal y fechas.
  * * OBJETIVO:
- * Conocer cuántas sucursales existen en cada estado, con el fin de analizar su distribución geográfica.
+ * Generar una bitácora logística unificada e individualizada que documente cronológicamente el ingreso físico
+ * de productos a los almacenes de la empresa, diferenciando medicamentos comerciales de insumos médicos.
  * * FUNCIONAMIENTO:
- * Se selecciona el campo 'Estado' de la tabla 'Sucursal'.
- * COUNT(*) permite contar el número total de sucursales registradas por cada estado.
- * GROUP BY agrupa los registros por estado para poder hacer el conteo.
- * ORDER BY ordena los resultados de mayor a menor número de sucursales.
+ * Emplea el operador de conjuntos UNION ALL para consolidar de forma lineal dos subconsultas transaccionales de abastecimiento.
+ * Ambos bloques realizan operaciones JOIN con las tablas maestras 'Proveedor' y 'Sucursal' para mapear el origen y destino del lote.
+ * El primer segmento se enlaza a 'EntregarMedComercial' y 'MedComercial' para detallar los fármacos de patente; mientras que el
+ * segundo segmento se acopla a 'EntregarInsumo' y 'Insumo' para registrar los materiales médicos. Calcula dinámicamente el costo
+ * total multiplicando la cantidad por el precio unitario y aplica un ordenamiento descendente basado en la fecha de recepción.
  */
-SELECT 
-    Estado,
-    COUNT(*) AS NumeroSucursales
-FROM Sucursal
-GROUP BY Estado
-ORDER BY NumeroSucursales DESC;
+SELECT
+'Medicamento Comercial' AS TipoProducto,
+p.RazonSocial AS Proveedor,
+s.NombreSucursal,
+s.Estado AS EstadoSucursal,
+emc.FechaRecepcion,
+mc.NombreComercial AS Producto,
+mc.Presentacion,
+emc.CantidadRecibida,
+emc.PrecioUnitario,
+(emc.CantidadRecibida * emc.PrecioUnitario) AS CostoTotalLote,
+emc.FechaCaducidad,
+emc.CondicionesAlmacenamiento
+FROM EntregarMedComercial emc
+JOIN Proveedor p ON emc.IdProveedor = p.IdProveedor
+JOIN Sucursal s ON emc.IdSucursal = s.IdSucursal
+JOIN MedComercial mc ON emc.IdMedicamento = mc.IdMedicamento
+
+UNION ALL
+
+SELECT
+'Insumo' AS TipoProducto,
+p.RazonSocial AS Proveedor,
+s.NombreSucursal,
+s.Estado,
+ei.FechaRecepcion,
+i.NombreComercial AS Producto,
+i.FormaFisica AS Presentacion,
+ei.CantidadRecibida,
+ei.PrecioUnitario,
+(ei.CantidadRecibida * ei.PrecioUnitario) AS CostoTotalLote,
+ei.FechaCaducidad,
+ei.CondicionesAlmacenamiento
+FROM EntregarInsumo ei
+JOIN Proveedor p ON ei.IdProveedor = p.IdProveedor
+JOIN Sucursal s ON ei.IdSucursal = s.IdSucursal
+JOIN Insumo i ON ei.IdInsumo = i.IdInsumo
+
+ORDER BY FechaRecepcion DESC, NombreSucursal;
 
 
 /* * CONSULTA 13: Total de compras realizadas a cada proveedor.
